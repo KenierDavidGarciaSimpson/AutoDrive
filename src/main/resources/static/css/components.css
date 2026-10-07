@@ -1,0 +1,474 @@
+/* ==========================================================================
+   AutoDrive Motors - componentes
+   Ruta: src/main/resources/static/css/components.css
+
+   Piezas reutilizables por todas las pantallas. Sin sombras decorativas ni
+   degradados: la jerarquía sale del espacio, el peso tipográfico y el borde.
+   La única sombra es la de los diálogos, porque flotan sobre el contenido.
+   ========================================================================== */
+
+/* ---------- Utilidades de composición ---------- */
+.pila { display: grid; gap: var(--e-4); }
+.pila--amplia { gap: var(--e-6); }
+.fila { display: flex; flex-wrap: wrap; align-items: center; gap: var(--e-3); }
+.texto-secundario { color: var(--c-tinta-2); }
+
+/* ---------- Encabezado de pantalla: título + acciones ---------- */
+.encabezado {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--e-4);
+  margin-bottom: var(--e-6);
+}
+.encabezado__texto { display: grid; gap: var(--e-1); min-width: 0; }
+.encabezado__texto p { color: var(--c-tinta-2); max-width: 60ch; }
+.encabezado__acciones { display: flex; flex-wrap: wrap; gap: var(--e-3); }
+
+/* ---------- Panel: contenedor con borde, sin sombra ---------- */
+.panel {
+  background: var(--c-superficie);
+  border: 1px solid var(--c-linea);
+  border-radius: var(--r-contenedor);
+  padding: var(--e-5);
+}
+.panel > h2 { margin-bottom: var(--e-4); }
+
+/* ---------- Botones ---------- */
+.boton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--e-2);
+  min-height: var(--objetivo);
+  min-width: var(--objetivo);
+  padding: 0 var(--e-4);
+  border: 1px solid transparent;
+  border-radius: var(--r-control);
+  background: transparent;
+  color: var(--c-tinta);
+  font-size: var(--fs-llamada);
+  font-weight: var(--peso-fuerte);
+  line-height: var(--lh-ui);
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color var(--t-rapido), border-color var(--t-rapido);
+}
+.boton svg { width: 1.125rem; height: 1.125rem; flex: none; }
+
+/* Principal: la acción más probable de la pantalla. Una por vista. */
+.boton--primario {
+  background: var(--c-acento);
+  color: var(--c-sobre-acento);
+}
+.boton--primario:hover { background: color-mix(in srgb, var(--c-acento) 88%, black); }
+.boton--primario:active { background: color-mix(in srgb, var(--c-acento) 76%, black); }
+
+/* Secundario: acciones alternativas, con borde para que se vea que es un botón */
+.boton--secundario {
+  background: var(--c-superficie);
+  border-color: var(--c-borde-control);
+}
+.boton--secundario:hover { background: var(--c-fondo); }
+.boton--secundario:active { background: var(--c-linea); }
+
+/* De texto: acciones discretas dentro de filas */
+.boton--texto { color: var(--c-acento); padding: 0 var(--e-3); }
+.boton--texto:hover { background: var(--c-acento-suave); }
+.boton--texto:active { background: color-mix(in srgb, var(--c-acento-suave) 80%, var(--c-acento)); }
+
+/* Peligro: solo para eliminar. Nunca es el botón por defecto de un diálogo. */
+.boton--peligro {
+  background: var(--c-peligro);
+  color: var(--c-sobre-peligro);
+}
+.boton--peligro:hover { background: color-mix(in srgb, var(--c-peligro) 88%, black); }
+.boton--peligro:active { background: color-mix(in srgb, var(--c-peligro) 76%, black); }
+
+/* Peligro en texto: para filas de tabla */
+.boton--peligro-texto { color: var(--c-peligro); padding: 0 var(--e-3); }
+.boton--peligro-texto:hover { background: var(--c-peligro-suave); }
+
+.boton[disabled],
+.boton[aria-disabled="true"] {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* Botón en proceso: muestra el girador y no acepta más clics */
+.boton[aria-busy="true"] { cursor: progress; }
+
+.girando {
+  width: 1rem;
+  height: 1rem;
+  flex: none;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: girar 0.8s linear infinite;
+}
+@keyframes girar { to { transform: rotate(360deg); } }
+
+/* ---------- Formularios ---------- */
+.formulario { display: grid; gap: var(--e-5); }
+.formulario__fila {
+  display: grid;
+  gap: var(--e-5);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+}
+.formulario__acciones {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--e-3);
+  flex-wrap: wrap;
+}
+/* En pantallas angostas los botones se apilan con la acción principal arriba */
+@media (max-width: 30rem) {
+  .formulario__acciones { flex-direction: column-reverse; }
+  .formulario__acciones .boton { width: 100%; }
+}
+
+.campo { display: flex; flex-direction: column; gap: var(--e-1); min-width: 0; }
+.campo__etiqueta {
+  font-size: var(--fs-subtitulo);
+  font-weight: var(--peso-fuerte);
+  line-height: var(--lh-ui);
+}
+.campo__opcional {
+  color: var(--c-tinta-2);
+  font-weight: var(--peso-normal);
+}
+.campo__ayuda,
+.campo__error {
+  font-size: var(--fs-nota);
+  line-height: var(--lh-ui);
+}
+.campo__ayuda { color: var(--c-tinta-2); }
+.campo__error {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--e-1);
+  color: var(--c-peligro);
+  font-weight: var(--peso-medio);
+}
+.campo__error svg { width: 1rem; height: 1rem; flex: none; margin-top: 0.0625rem; }
+
+.control {
+  width: 100%;
+  min-height: var(--objetivo);
+  padding: 0 var(--e-3);
+  background: var(--c-superficie);
+  color: var(--c-tinta);
+  border: 1px solid var(--c-borde-control);
+  border-radius: var(--r-control);
+  font-size: var(--fs-cuerpo);
+  line-height: var(--lh-ui);
+}
+textarea.control { padding-block: var(--e-2); min-height: 5.5rem; resize: vertical; }
+.control::placeholder { color: var(--c-tinta-2); opacity: 1; }
+.control:focus-visible { border-color: var(--c-acento); }
+.control[disabled] { opacity: 0.6; cursor: not-allowed; }
+
+/* Campo con error: borde rojo más grueso (sin mover el diseño) + mensaje con icono */
+.control[aria-invalid="true"] {
+  border-color: var(--c-peligro);
+  box-shadow: inset 0 0 0 1px var(--c-peligro);
+}
+
+/* ---------- Banners: mensajes dentro de la pantalla (no alertas emergentes) ---------- */
+.banner {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--e-3);
+  padding: var(--e-3) var(--e-4);
+  border: 1px solid var(--c-linea);
+  border-radius: var(--r-contenedor);
+  background: var(--c-superficie);
+  color: var(--c-tinta);
+  font-size: var(--fs-llamada);
+  line-height: var(--lh-texto);
+}
+.banner > svg { width: 1.25rem; height: 1.25rem; flex: none; margin-top: 0.125rem; }
+.banner__cuerpo { display: grid; gap: var(--e-1); min-width: 0; }
+.banner__titulo { font-weight: var(--peso-fuerte); }
+.banner__lista { margin: 0; padding-left: var(--e-5); }
+
+.banner--error { background: var(--c-peligro-suave); border-color: var(--c-peligro); }
+.banner--error > svg { color: var(--c-peligro); }
+.banner--exito { background: var(--c-exito-suave); border-color: var(--c-exito); }
+.banner--exito > svg { color: var(--c-exito); }
+.banner--info { background: var(--c-acento-suave); border-color: var(--c-acento); }
+.banner--info > svg { color: var(--c-acento); }
+
+/* ---------- Filtros ---------- */
+.filtros {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--e-3);
+  margin-bottom: var(--e-4);
+}
+.filtros .campo { flex: 1 1 12rem; max-width: 18rem; }
+
+/* ---------- Tablas ----------
+   Escritorio: tabla normal. Móvil (< 768 px): cada fila pasa a ser una
+   tarjeta con "etiqueta: valor". El HTML lo genera crearTabla() en ui.js. */
+.tabla-envoltura {
+  background: var(--c-superficie);
+  border: 1px solid var(--c-linea);
+  border-radius: var(--r-contenedor);
+  overflow-x: auto;
+}
+.tabla {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-llamada);
+  line-height: var(--lh-ui);
+}
+.tabla th {
+  padding: var(--e-3) var(--e-4);
+  border-bottom: 1px solid var(--c-linea);
+  color: var(--c-tinta-2);
+  font-size: var(--fs-subtitulo);
+  font-weight: var(--peso-fuerte);
+  text-align: left;
+  white-space: nowrap;
+}
+.tabla td {
+  padding: var(--e-3) var(--e-4);
+  border-bottom: 1px solid var(--c-linea);
+  vertical-align: middle;
+}
+.tabla tbody tr:last-child td { border-bottom: 0; }
+.tabla tbody tr:hover { background: var(--c-fondo); }
+.tabla .t-derecha { text-align: right; }
+.tabla .t-acciones { text-align: right; white-space: nowrap; }
+.tabla .t-acciones .boton + .boton { margin-left: var(--e-1); }
+
+@media (max-width: 47.99rem) {
+  .tabla--apilable thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+  .tabla--apilable,
+  .tabla--apilable tbody,
+  .tabla--apilable tr,
+  .tabla--apilable td { display: block; }
+  .tabla--apilable tr {
+    padding: var(--e-3) var(--e-4);
+    border-bottom: 1px solid var(--c-linea);
+  }
+  .tabla--apilable tbody tr:last-child { border-bottom: 0; }
+  .tabla--apilable tbody tr:hover { background: none; }
+  .tabla--apilable td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--e-4);
+    padding: var(--e-1) 0;
+    border: 0;
+    text-align: right;
+  }
+  .tabla--apilable td::before {
+    content: attr(data-etiqueta);
+    flex: none;
+    color: var(--c-tinta-2);
+    font-weight: var(--peso-medio);
+    text-align: left;
+  }
+  .tabla--apilable td.t-acciones { justify-content: flex-end; padding-top: var(--e-2); }
+  .tabla--apilable td.t-acciones::before { content: none; }
+}
+
+/* ---------- Estado del vehículo: icono + texto + color ---------- */
+.estado {
+  --estado-fg: var(--c-tinta);
+  --estado-bg: var(--c-linea);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--e-1);
+  padding: 0.125rem var(--e-2) 0.125rem 0.375rem;
+  border-radius: 999px;
+  background: var(--estado-bg);
+  color: var(--estado-fg);
+  font-size: var(--fs-nota);
+  font-weight: var(--peso-fuerte);
+  line-height: var(--lh-ui);
+  white-space: nowrap;
+}
+.estado svg { width: 0.875rem; height: 0.875rem; flex: none; }
+.estado[data-estado="DISPONIBLE"] { --estado-fg: var(--c-disponible); --estado-bg: var(--c-disponible-fondo); }
+.estado[data-estado="VENDIDO"] { --estado-fg: var(--c-vendido); --estado-bg: var(--c-vendido-fondo); }
+.estado[data-estado="EN_MANTENIMIENTO"] { --estado-fg: var(--c-mantenimiento); --estado-bg: var(--c-mantenimiento-fondo); }
+
+/* ---------- La placa: el elemento distintivo de AutoDrive ----------
+   Fondo amarillo y letras oscuras, como una placa colombiana. El borde oscuro
+   la delimita sobre superficies claras (el amarillo solo no alcanza contraste). */
+.placa {
+  display: inline-block;
+  padding: 0.0625rem var(--e-2);
+  background: var(--c-placa-fondo);
+  color: var(--c-placa-tinta);
+  border: 2px solid var(--c-placa-tinta);
+  border-radius: var(--r-placa);
+  font-size: var(--fs-llamada);
+  font-weight: var(--peso-negrita);
+  letter-spacing: 0.1em;
+  line-height: 1.35;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.placa--grande {
+  padding: 0.125rem var(--e-3);
+  font-size: var(--fs-titulo-2);
+  border-radius: calc(var(--r-placa) * 1.5);
+}
+
+/* ---------- Estados de pantalla: cargando, vacío, error ---------- */
+.estado-pantalla {
+  display: grid;
+  justify-items: center;
+  gap: var(--e-3);
+  padding: var(--e-12) var(--e-4);
+  text-align: center;
+  color: var(--c-tinta-2);
+}
+.estado-pantalla > svg { width: 2.5rem; height: 2.5rem; }
+.estado-pantalla__titulo {
+  color: var(--c-tinta);
+  font-size: var(--fs-titulo-3);
+  font-weight: var(--peso-fuerte);
+}
+.estado-pantalla p { max-width: 38rem; }
+.estado-pantalla--error > svg { color: var(--c-peligro); }
+
+/* Esqueleto de carga: aparece de inmediato, sin degradados ni destellos */
+.esqueleto {
+  display: block;
+  height: 1rem;
+  border-radius: var(--r-control);
+  background: var(--c-linea);
+  animation: pulso 1.4s ease-in-out infinite;
+}
+.esqueleto--titulo { height: 1.75rem; width: 40%; }
+.esqueleto--medio { width: 70%; }
+.esqueleto--corto { width: 40%; }
+.esqueleto-lista { display: grid; gap: var(--e-4); padding: var(--e-5); }
+@keyframes pulso { 50% { opacity: 0.5; } }
+
+/* ---------- Lista de datos (clave / valor), p. ej. resumen de una venta ---------- */
+.datos {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--e-2) var(--e-4);
+  margin: 0;
+}
+.datos dt { color: var(--c-tinta-2); }
+.datos dd { margin: 0; text-align: right; font-variant-numeric: tabular-nums; }
+.datos .datos__total {
+  padding-top: var(--e-3);
+  border-top: 1px solid var(--c-linea);
+  font-size: var(--fs-titulo-3);
+  font-weight: var(--peso-negrita);
+  color: var(--c-tinta);
+}
+
+/* ---------- Diálogos y hojas (elemento nativo <dialog>) ---------- */
+.dialogo {
+  width: min(32rem, calc(100vw - 2rem));
+  max-height: min(90dvh, 46rem);
+  padding: 0;
+  border: 1px solid var(--c-linea);
+  border-radius: var(--r-dialogo);
+  background: var(--c-superficie-elevada);
+  color: var(--c-tinta);
+  box-shadow: 0 1.5rem 4rem rgb(0 0 0 / 0.25);
+  overflow: hidden;
+}
+.dialogo[open] {
+  display: flex;
+  flex-direction: column;
+  animation: aparecer var(--t-normal) ease-out;
+}
+.dialogo::backdrop { background: var(--c-velo); }
+.dialogo--compacto { width: min(26rem, calc(100vw - 2rem)); }
+
+.dialogo__cabecera {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--e-3);
+  padding: var(--e-5) var(--e-5) var(--e-3);
+}
+.dialogo__titulo { font-size: var(--fs-titulo-3); }
+.dialogo__cuerpo {
+  padding: var(--e-2) var(--e-5) var(--e-5);
+  overflow-y: auto;
+}
+.dialogo__pie {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--e-3);
+  flex-wrap: wrap;
+  padding: var(--e-3) var(--e-5) var(--e-5);
+}
+
+/* Móvil: el diálogo se vuelve una hoja anclada abajo */
+@media (max-width: 40rem) {
+  .dialogo {
+    width: 100%;
+    max-width: none;
+    margin: auto 0 0;
+    border-radius: var(--r-dialogo) var(--r-dialogo) 0 0;
+    max-height: 92dvh;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  .dialogo__pie { flex-direction: column-reverse; }
+  .dialogo__pie .boton { width: 100%; }
+}
+
+@keyframes aparecer { from { opacity: 0; } }
+
+/* ---------- Avisos breves de confirmación (no para errores) ---------- */
+.avisos {
+  position: fixed;
+  z-index: 60;
+  left: var(--e-4);
+  right: var(--e-4);
+  bottom: calc(3.5rem + env(safe-area-inset-bottom, 0px) + var(--e-4));
+  display: grid;
+  gap: var(--e-2);
+  justify-items: center;
+  pointer-events: none;
+}
+.aviso {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: var(--e-3);
+  max-width: 28rem;
+  padding: var(--e-3) var(--e-4);
+  border-radius: var(--r-contenedor);
+  background: var(--c-tinta);
+  color: var(--c-superficie);
+  font-size: var(--fs-llamada);
+  line-height: var(--lh-ui);
+  animation: aparecer var(--t-normal) ease-out;
+}
+.aviso > svg { width: 1.25rem; height: 1.25rem; flex: none; }
+.aviso :focus-visible { outline-color: var(--c-superficie); }
+.aviso .boton { color: inherit; min-height: 2rem; min-width: 2rem; padding: 0 var(--e-2); }
+
+@media (min-width: 56.25rem) {
+  .avisos {
+    left: auto;
+    right: var(--e-6);
+    bottom: var(--e-6);
+    justify-items: end;
+  }
+}
