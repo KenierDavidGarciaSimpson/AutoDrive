@@ -1,5 +1,6 @@
 package com.autodrive.motors.controller;
 
+import com.autodrive.motors.dto.EstadoRequest;
 import com.autodrive.motors.dto.PrecioUsdResponse;
 import com.autodrive.motors.dto.VehiculoRequest;
 import com.autodrive.motors.dto.VehiculoResponse;
@@ -9,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -62,6 +64,12 @@ public class VehiculoController {
     @PutMapping("/{id}")
     public VehiculoResponse actualizar(@PathVariable("id") Long id, @Valid @RequestBody VehiculoRequest req) {
         return vehiculoService.actualizar(id, req);
+    }
+
+    @PatchMapping("/{id}/estado")
+    public VehiculoResponse cambiarEstado(@PathVariable("id") Long id,
+                                          @Valid @RequestBody EstadoRequest req) {
+        return vehiculoService.cambiarEstadoManual(id, req.estado());
     }
 
     @DeleteMapping("/{id}")

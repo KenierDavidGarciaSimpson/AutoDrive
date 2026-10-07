@@ -39,14 +39,14 @@ public class VehiculoService {
     public VehiculoResponse crear(VehiculoRequest req) {
         String placa = normalizarPlaca(req.placa());
 
-        // RN03: placa única
+       
         if (vehiculoRepository.existsByPlaca(placa)) {
             throw new ReglaNegocioException("Ya existe un vehículo con la placa " + placa);
         }
 
         Vehiculo vehiculo = new Vehiculo();
         copiarDatos(vehiculo, req, placa);
-        vehiculo.setEstado(EstadoVehiculo.DISPONIBLE); // al registrar siempre queda DISPONIBLE
+        vehiculo.setEstado(EstadoVehiculo.DISPONIBLE); 
 
         return VehiculoResponse.from(vehiculoRepository.save(vehiculo));
     }
@@ -75,7 +75,7 @@ public class VehiculoService {
 
     @Transactional
     public VehiculoResponse actualizar(Long id, VehiculoRequest req) {
-        // Se bloquea el vehículo para que no cambie su estado a la vez desde una venta
+        
         Vehiculo vehiculo = vehiculoRepository.findByIdParaActualizar(id)
                 .orElseThrow(() -> RecursoNoEncontradoException.de("Vehículo", id));
         String placa = normalizarPlaca(req.placa());
@@ -86,7 +86,7 @@ public class VehiculoService {
 
         copiarDatos(vehiculo, req, placa);
 
-        // Acuerdo 5: así el vehículo vuelve a DISPONIBLE después de un mantenimiento
+     
         if (req.estado() != null && req.estado() != vehiculo.getEstado()) {
             cambiarEstado(vehiculo, req.estado());
         }
@@ -98,7 +98,7 @@ public class VehiculoService {
     public void eliminar(Long id) {
         Vehiculo vehiculo = obtener(id);
 
-        // Acuerdo 8: no se elimina un vehículo con ventas o mantenimientos
+       
         if (ventaRepository.existsByVehiculoId(id) || mantenimientoRepository.existsByVehiculoId(id)) {
             throw new ReglaNegocioException(
                     "No se puede eliminar el vehículo porque tiene ventas o mantenimientos asociados");
@@ -107,7 +107,16 @@ public class VehiculoService {
         vehiculoRepository.delete(vehiculo);
     }
 
-    /** Acuerdo 9: GET /vehiculos/{id}/precio-usd. Si la API externa falla se responde 503. */
+    @Transactional
+    public VehiculoResponse cambiarEstadoManual(Long id, EstadoVehiculo nuevoEstado) {
+        Vehiculo vehiculo = vehiculoRepository.findByIdParaActualizar(id)
+                .orElseThrow(() -> RecursoNoEncontradoException.de("Vehículo", id));
+        if (vehiculo.getEstado() != nuevoEstado) {
+            cambiarEstado(vehiculo, nuevoEstado);
+        }
+        return VehiculoResponse.from(vehiculoRepository.save(vehiculo));
+    }
+
     public PrecioUsdResponse consultarPrecioUsd(Long id) {
         Vehiculo vehiculo = obtener(id);
 
@@ -118,7 +127,6 @@ public class VehiculoService {
                 vehiculo.getPrecio(), tasa, precioUsd);
     }
 
-    // ---------- auxiliares ----------
 
     private Vehiculo obtener(Long id) {
         return vehiculoRepository.findById(id)
@@ -137,10 +145,6 @@ public class VehiculoService {
         vehiculo.setPrecio(req.precio());
     }
 
-    /**
-     * Un vehículo VENDIDO no cambia de estado, y solo una venta lo deja en VENDIDO.
-     * Entre DISPONIBLE y EN_MANTENIMIENTO se puede cambiar libremente.
-     */
     private void cambiarEstado(Vehiculo vehiculo, EstadoVehiculo nuevoEstado) {
         if (vehiculo.getEstado() == EstadoVehiculo.VENDIDO) {
             throw new ReglaNegocioException("No se puede cambiar el estado de un vehículo vendido");
