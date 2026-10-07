@@ -1,0 +1,1554 @@
+{
+	"id": "ff881685-c794-4e00-a584-6a43e1e2985f",
+	"name": "AutoDrive Motors - API REST",
+	"timestamp": "2026-10-07T19:47:34.712Z",
+	"collection_id": "58796881-4d6ba114-88af-4eee-95a9-822fc7654ad7",
+	"folder_id": 0,
+	"environment_id": "0",
+	"totalPass": 72,
+	"delay": 0,
+	"persist": true,
+	"status": "finished",
+	"startedAt": "2026-10-07T19:47:19.644Z",
+	"totalFail": 0,
+	"results": [
+		{
+			"id": "4ec6328e-1dae-4d3e-b172-c2dd70b4b2ed",
+			"name": "01 Registrar cliente (201)",
+			"url": "http://localhost:8080/clientes",
+			"time": 55,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {
+				"Cliente creado: 201": true
+			},
+			"testPassFailCounts": {
+				"Cliente creado: 201": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				55
+			],
+			"allTests": [
+				{
+					"Cliente creado: 201": true
+				}
+			]
+		},
+		{
+			"id": "8eecf83a-9700-469f-a148-574222c0adde",
+			"name": "02 Correo repetido (409 - RN4)",
+			"url": "http://localhost:8080/clientes",
+			"time": 96,
+			"responseCode": {
+				"code": 409,
+				"name": "Conflict"
+			},
+			"tests": {
+				"Correo repetido rechazado: 409": true,
+				"Error con formato {fecha, estado, mensaje}": true
+			},
+			"testPassFailCounts": {
+				"Correo repetido rechazado: 409": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Error con formato {fecha, estado, mensaje}": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				96
+			],
+			"allTests": [
+				{
+					"Correo repetido rechazado: 409": true,
+					"Error con formato {fecha, estado, mensaje}": true
+				}
+			]
+		},
+		{
+			"id": "52788906-e718-4e48-917b-84b6ebeffc25",
+			"name": "03 Correo inválido (400)",
+			"url": "http://localhost:8080/clientes",
+			"time": 56,
+			"responseCode": {
+				"code": 400,
+				"name": "Bad Request"
+			},
+			"tests": {
+				"Validación: 400": true,
+				"Error con formato {fecha, estado, mensaje}": true
+			},
+			"testPassFailCounts": {
+				"Validación: 400": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Error con formato {fecha, estado, mensaje}": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				56
+			],
+			"allTests": [
+				{
+					"Validación: 400": true,
+					"Error con formato {fecha, estado, mensaje}": true
+				}
+			]
+		},
+		{
+			"id": "b0fc276e-127a-4567-9526-a4129efb4eba",
+			"name": "04 Campos vacíos (400)",
+			"url": "http://localhost:8080/clientes",
+			"time": 26,
+			"responseCode": {
+				"code": 400,
+				"name": "Bad Request"
+			},
+			"tests": {
+				"Validación: 400": true,
+				"Error con formato {fecha, estado, mensaje}": true
+			},
+			"testPassFailCounts": {
+				"Validación: 400": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Error con formato {fecha, estado, mensaje}": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				26
+			],
+			"allTests": [
+				{
+					"Validación: 400": true,
+					"Error con formato {fecha, estado, mensaje}": true
+				}
+			]
+		},
+		{
+			"id": "d50c6537-4800-4274-9514-e76899fdad42",
+			"name": "05 Consultar clientes (200)",
+			"url": "http://localhost:8080/clientes",
+			"time": 224,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Listado: 200": true
+			},
+			"testPassFailCounts": {
+				"Listado: 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				224
+			],
+			"allTests": [
+				{
+					"Listado: 200": true
+				}
+			]
+		},
+		{
+			"id": "019c8c8c-2349-4961-9c42-aeb8907d845d",
+			"name": "06 Consultar cliente por id (200)",
+			"url": "http://localhost:8080/clientes/2",
+			"time": 76,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Cliente encontrado: 200": true
+			},
+			"testPassFailCounts": {
+				"Cliente encontrado: 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				76
+			],
+			"allTests": [
+				{
+					"Cliente encontrado: 200": true
+				}
+			]
+		},
+		{
+			"id": "fa30d132-72a0-4987-a49b-08357d6c32bb",
+			"name": "07 Actualizar cliente (200)",
+			"url": "http://localhost:8080/clientes/2",
+			"time": 88,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Cliente actualizado: 200": true,
+				"Nombre actualizado": true
+			},
+			"testPassFailCounts": {
+				"Cliente actualizado: 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Nombre actualizado": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				88
+			],
+			"allTests": [
+				{
+					"Cliente actualizado: 200": true,
+					"Nombre actualizado": true
+				}
+			]
+		},
+		{
+			"id": "21e9f2c8-45c3-4657-b3d7-8693f5e0a6d8",
+			"name": "08 Cliente inexistente (404)",
+			"url": "http://localhost:8080/clientes/999999",
+			"time": 36,
+			"responseCode": {
+				"code": 404,
+				"name": "Not Found"
+			},
+			"tests": {
+				"No encontrado: 404": true,
+				"Error con formato {fecha, estado, mensaje}": true
+			},
+			"testPassFailCounts": {
+				"No encontrado: 404": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Error con formato {fecha, estado, mensaje}": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				36
+			],
+			"allTests": [
+				{
+					"No encontrado: 404": true,
+					"Error con formato {fecha, estado, mensaje}": true
+				}
+			]
+		},
+		{
+			"id": "a9223ca7-6c5a-4025-8bda-d40d722e13d4",
+			"name": "01 Registrar vehículo < 100M (201)",
+			"url": "http://localhost:8080/vehiculos",
+			"time": 548,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {
+				"Vehículo creado: 201": true,
+				"Queda DISPONIBLE": true
+			},
+			"testPassFailCounts": {
+				"Vehículo creado: 201": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Queda DISPONIBLE": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				548
+			],
+			"allTests": [
+				{
+					"Vehículo creado: 201": true,
+					"Queda DISPONIBLE": true
+				}
+			]
+		},
+		{
+			"id": "ee546d6f-31f2-4f17-9b41-f33d0f35712b",
+			"name": "03 Registrar vehículo = 100M (201)",
+			"url": "http://localhost:8080/vehiculos",
+			"time": 37,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {
+				"Vehículo creado: 201": true
+			},
+			"testPassFailCounts": {
+				"Vehículo creado: 201": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				37
+			],
+			"allTests": [
+				{
+					"Vehículo creado: 201": true
+				}
+			]
+		},
+		{
+			"id": "b093d23d-7091-4487-b797-f520f8d9f30a",
+			"name": "04 Registrar vehículo para taller (201)",
+			"url": "http://localhost:8080/vehiculos",
+			"time": 56,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {
+				"Vehículo creado: 201": true
+			},
+			"testPassFailCounts": {
+				"Vehículo creado: 201": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				56
+			],
+			"allTests": [
+				{
+					"Vehículo creado: 201": true
+				}
+			]
+		},
+		{
+			"id": "2ba2f8de-d1c4-4818-bdf5-aa396c132db1",
+			"name": "05 Placa repetida (409 - RN3)",
+			"url": "http://localhost:8080/vehiculos",
+			"time": 31,
+			"responseCode": {
+				"code": 409,
+				"name": "Conflict"
+			},
+			"tests": {
+				"Placa repetida rechazada: 409": true,
+				"Error con formato {fecha, estado, mensaje}": true
+			},
+			"testPassFailCounts": {
+				"Placa repetida rechazada: 409": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Error con formato {fecha, estado, mensaje}": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				31
+			],
+			"allTests": [
+				{
+					"Placa repetida rechazada: 409": true,
+					"Error con formato {fecha, estado, mensaje}": true
+				}
+			]
+		},
+		{
+			"id": "5c1bd91e-b937-49fc-b672-2262c54816f3",
+			"name": "06 Precio negativo (400 - RN2)",
+			"url": "http://localhost:8080/vehiculos",
+			"time": 18,
+			"responseCode": {
+				"code": 400,
+				"name": "Bad Request"
+			},
+			"tests": {
+				"Precio negativo rechazado: 400": true,
+				"Error con formato {fecha, estado, mensaje}": true
+			},
+			"testPassFailCounts": {
+				"Precio negativo rechazado: 400": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Error con formato {fecha, estado, mensaje}": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				18
+			],
+			"allTests": [
+				{
+					"Precio negativo rechazado: 400": true,
+					"Error con formato {fecha, estado, mensaje}": true
+				}
+			]
+		},
+		{
+			"id": "a15c01e6-d5da-4a7a-9950-6d8f1a89c58d",
+			"name": "07 Consultar vehículos (200)",
+			"url": "http://localhost:8080/vehiculos",
+			"time": 97,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Listado: 200": true
+			},
+			"testPassFailCounts": {
+				"Listado: 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				97
+			],
+			"allTests": [
+				{
+					"Listado: 200": true
+				}
+			]
+		},
+		{
+			"id": "9e142d65-8d68-4982-a6a5-b22daf272311",
+			"name": "08 Consultar disponibles (200)",
+			"url": "http://localhost:8080/vehiculos/disponibles",
+			"time": 37,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Listado: 200": true,
+				"Todos están DISPONIBLE": true
+			},
+			"testPassFailCounts": {
+				"Listado: 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Todos están DISPONIBLE": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				37
+			],
+			"allTests": [
+				{
+					"Listado: 200": true,
+					"Todos están DISPONIBLE": true
+				}
+			]
+		},
+		{
+			"id": "8cb3bdd0-297a-47bf-8837-bc423e66e3b8",
+			"name": "02 Registrar vehículo > 100M (201)",
+			"url": "http://localhost:8080/vehiculos",
+			"time": 42,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {
+				"Vehículo creado: 201": true
+			},
+			"testPassFailCounts": {
+				"Vehículo creado: 201": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				42
+			],
+			"allTests": [
+				{
+					"Vehículo creado: 201": true
+				}
+			]
+		},
+		{
+			"id": "1e948052-11e3-4e51-be9d-73a19656beaf",
+			"name": "09 Consultar por marca (200)",
+			"url": "http://localhost:8080/vehiculos/marca/Toyota",
+			"time": 117,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Listado: 200": true,
+				"Todos son Toyota": true
+			},
+			"testPassFailCounts": {
+				"Listado: 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Todos son Toyota": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				117
+			],
+			"allTests": [
+				{
+					"Listado: 200": true,
+					"Todos son Toyota": true
+				}
+			]
+		},
+		{
+			"id": "b6a5b6b9-7132-4c2b-9703-83e4b25b0d9b",
+			"name": "10 Consultar vehículo por id (200)",
+			"url": "http://localhost:8080/vehiculos/1",
+			"time": 32,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Vehículo encontrado: 200": true
+			},
+			"testPassFailCounts": {
+				"Vehículo encontrado: 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				32
+			],
+			"allTests": [
+				{
+					"Vehículo encontrado: 200": true
+				}
+			]
+		},
+		{
+			"id": "398cc872-bc58-4777-a9e3-ced73916ff40",
+			"name": "11 Actualizar vehículo (200)",
+			"url": "http://localhost:8080/vehiculos/1",
+			"time": 90,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Vehículo actualizado: 200": true
+			},
+			"testPassFailCounts": {
+				"Vehículo actualizado: 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				90
+			],
+			"allTests": [
+				{
+					"Vehículo actualizado: 200": true
+				}
+			]
+		},
+		{
+			"id": "710b1c50-5ceb-44d1-a232-e24645f38f00",
+			"name": "12 Vehículo inexistente (404)",
+			"url": "http://localhost:8080/vehiculos/999999",
+			"time": 17,
+			"responseCode": {
+				"code": 404,
+				"name": "Not Found"
+			},
+			"tests": {
+				"No encontrado: 404": true,
+				"Error con formato {fecha, estado, mensaje}": true
+			},
+			"testPassFailCounts": {
+				"No encontrado: 404": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Error con formato {fecha, estado, mensaje}": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				17
+			],
+			"allTests": [
+				{
+					"No encontrado: 404": true,
+					"Error con formato {fecha, estado, mensaje}": true
+				}
+			]
+		},
+		{
+			"id": "ab174899-3f58-44a3-960c-e670f8744187",
+			"name": "01 Consultar tasa de cambio (200)",
+			"url": "http://localhost:8080/tasa-cambio",
+			"time": 5552,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Tasa obtenida: 200": true,
+				"Trae la tasa COP por USD": true
+			},
+			"testPassFailCounts": {
+				"Tasa obtenida: 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Trae la tasa COP por USD": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				5552
+			],
+			"allTests": [
+				{
+					"Tasa obtenida: 200": true,
+					"Trae la tasa COP por USD": true
+				}
+			]
+		},
+		{
+			"id": "426aa694-e28d-437c-a22c-0ee30b9b3f77",
+			"name": "02 Precio del vehículo en USD (200)",
+			"url": "http://localhost:8080/vehiculos/4/precio-usd",
+			"time": 20,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Conversión: 200": true,
+				"precioUsd = precioCop / tasa": true
+			},
+			"testPassFailCounts": {
+				"Conversión: 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"precioUsd = precioCop / tasa": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				20
+			],
+			"allTests": [
+				{
+					"Conversión: 200": true,
+					"precioUsd = precioCop / tasa": true
+				}
+			]
+		},
+		{
+			"id": "44592125-4086-4220-a394-b436107ae74f",
+			"name": "01 Venta sin descuento < 100M (201)",
+			"url": "http://localhost:8080/ventas",
+			"time": 131,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {
+				"Venta creada: 201": true,
+				"Sin descuento y total = precio": true
+			},
+			"testPassFailCounts": {
+				"Venta creada: 201": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Sin descuento y total = precio": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				131
+			],
+			"allTests": [
+				{
+					"Venta creada: 201": true,
+					"Sin descuento y total = precio": true
+				}
+			]
+		},
+		{
+			"id": "ae2a785f-0bba-4396-8f74-612dd18a53ce",
+			"name": "02 Venta con descuento > 100M (201 - RN6)",
+			"url": "http://localhost:8080/ventas",
+			"time": 60,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {
+				"Venta creada: 201": true,
+				"Descuento del 5%: 7.500.000 y total 142.500.000": true
+			},
+			"testPassFailCounts": {
+				"Venta creada: 201": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Descuento del 5%: 7.500.000 y total 142.500.000": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				60
+			],
+			"allTests": [
+				{
+					"Venta creada: 201": true,
+					"Descuento del 5%: 7.500.000 y total 142.500.000": true
+				}
+			]
+		},
+		{
+			"id": "9c75d267-e653-4331-86e3-060d0d2e5ae4",
+			"name": "04 Vender vehículo ya vendido (409 - RN1)",
+			"url": "http://localhost:8080/ventas",
+			"time": 42,
+			"responseCode": {
+				"code": 409,
+				"name": "Conflict"
+			},
+			"tests": {
+				"Venta rechazada: 409": true,
+				"Error con formato {fecha, estado, mensaje}": true
+			},
+			"testPassFailCounts": {
+				"Venta rechazada: 409": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Error con formato {fecha, estado, mensaje}": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				42
+			],
+			"allTests": [
+				{
+					"Venta rechazada: 409": true,
+					"Error con formato {fecha, estado, mensaje}": true
+				}
+			]
+		},
+		{
+			"id": "7b14c9b5-4f88-470b-81cd-6f4cbb5b0ec2",
+			"name": "05 Estado cambió a VENDIDO (200 - RF13)",
+			"url": "http://localhost:8080/vehiculos/1",
+			"time": 41,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Vehículo encontrado: 200": true,
+				"Estado VENDIDO": true
+			},
+			"testPassFailCounts": {
+				"Vehículo encontrado: 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Estado VENDIDO": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				41
+			],
+			"allTests": [
+				{
+					"Vehículo encontrado: 200": true,
+					"Estado VENDIDO": true
+				}
+			]
+		},
+		{
+			"id": "419b3c1f-0b18-4cf2-887e-793b476765d6",
+			"name": "03 Venta de exactamente 100M (201 - sin descuento)",
+			"url": "http://localhost:8080/ventas",
+			"time": 41,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {
+				"Venta creada: 201": true,
+				"En el límite no hay descuento": true
+			},
+			"testPassFailCounts": {
+				"Venta creada: 201": {
+					"pass": 1,
+					"fail": 0
+				},
+				"En el límite no hay descuento": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				41
+			],
+			"allTests": [
+				{
+					"Venta creada: 201": true,
+					"En el límite no hay descuento": true
+				}
+			]
+		},
+		{
+			"id": "2c58629a-aa2c-401b-9844-33bc0f51d175",
+			"name": "06 Cliente inexistente (404)",
+			"url": "http://localhost:8080/ventas",
+			"time": 20,
+			"responseCode": {
+				"code": 404,
+				"name": "Not Found"
+			},
+			"tests": {
+				"No encontrado: 404": true,
+				"Error con formato {fecha, estado, mensaje}": true
+			},
+			"testPassFailCounts": {
+				"No encontrado: 404": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Error con formato {fecha, estado, mensaje}": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				20
+			],
+			"allTests": [
+				{
+					"No encontrado: 404": true,
+					"Error con formato {fecha, estado, mensaje}": true
+				}
+			]
+		},
+		{
+			"id": "521ede03-0631-4f5a-8467-c4347141410c",
+			"name": "07 Consultar ventas (200)",
+			"url": "http://localhost:8080/ventas",
+			"time": 59,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Listado: 200": true
+			},
+			"testPassFailCounts": {
+				"Listado: 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				59
+			],
+			"allTests": [
+				{
+					"Listado: 200": true
+				}
+			]
+		},
+		{
+			"id": "b383fd79-ce48-4d8a-9a8d-9a62dd9f77ff",
+			"name": "01 Registrar mantenimiento (201)",
+			"url": "http://localhost:8080/mantenimientos",
+			"time": 83,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {
+				"Mantenimiento creado: 201": true
+			},
+			"testPassFailCounts": {
+				"Mantenimiento creado: 201": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				83
+			],
+			"allTests": [
+				{
+					"Mantenimiento creado: 201": true
+				}
+			]
+		},
+		{
+			"id": "e9eede66-212f-4bd9-84e1-76d502056eef",
+			"name": "02 Estado cambió a EN_MANTENIMIENTO (200 - RF17)",
+			"url": "http://localhost:8080/vehiculos/3",
+			"time": 18,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Vehículo encontrado: 200": true,
+				"Estado EN_MANTENIMIENTO": true
+			},
+			"testPassFailCounts": {
+				"Vehículo encontrado: 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Estado EN_MANTENIMIENTO": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				18
+			],
+			"allTests": [
+				{
+					"Vehículo encontrado: 200": true,
+					"Estado EN_MANTENIMIENTO": true
+				}
+			]
+		},
+		{
+			"id": "2a7eb3f9-c937-46a1-822f-ecec2328e0fc",
+			"name": "03 Vender vehículo en mantenimiento (409 - RN1)",
+			"url": "http://localhost:8080/ventas",
+			"time": 22,
+			"responseCode": {
+				"code": 409,
+				"name": "Conflict"
+			},
+			"tests": {
+				"Venta rechazada: 409": true,
+				"Error con formato {fecha, estado, mensaje}": true
+			},
+			"testPassFailCounts": {
+				"Venta rechazada: 409": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Error con formato {fecha, estado, mensaje}": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				22
+			],
+			"allTests": [
+				{
+					"Venta rechazada: 409": true,
+					"Error con formato {fecha, estado, mensaje}": true
+				}
+			]
+		},
+		{
+			"id": "efdab811-9582-4821-9625-7806585936a5",
+			"name": "05 Mantenimiento a vehículo vendido (409)",
+			"url": "http://localhost:8080/mantenimientos",
+			"time": 21,
+			"responseCode": {
+				"code": 409,
+				"name": "Conflict"
+			},
+			"tests": {
+				"Rechazado: 409": true,
+				"Error con formato {fecha, estado, mensaje}": true
+			},
+			"testPassFailCounts": {
+				"Rechazado: 409": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Error con formato {fecha, estado, mensaje}": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				21
+			],
+			"allTests": [
+				{
+					"Rechazado: 409": true,
+					"Error con formato {fecha, estado, mensaje}": true
+				}
+			]
+		},
+		{
+			"id": "5c83915c-4b8a-4e93-84d4-bf2e843c0838",
+			"name": "04 Mantenimiento a vehículo ya en mantenimiento (409)",
+			"url": "http://localhost:8080/mantenimientos",
+			"time": 20,
+			"responseCode": {
+				"code": 409,
+				"name": "Conflict"
+			},
+			"tests": {
+				"Rechazado: 409": true,
+				"Error con formato {fecha, estado, mensaje}": true
+			},
+			"testPassFailCounts": {
+				"Rechazado: 409": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Error con formato {fecha, estado, mensaje}": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				20
+			],
+			"allTests": [
+				{
+					"Rechazado: 409": true,
+					"Error con formato {fecha, estado, mensaje}": true
+				}
+			]
+		},
+		{
+			"id": "4d2f18e2-5e15-4801-8fd6-cd8c681544a8",
+			"name": "06 Costo negativo (400)",
+			"url": "http://localhost:8080/mantenimientos",
+			"time": 16,
+			"responseCode": {
+				"code": 400,
+				"name": "Bad Request"
+			},
+			"tests": {
+				"Validación: 400": true,
+				"Error con formato {fecha, estado, mensaje}": true
+			},
+			"testPassFailCounts": {
+				"Validación: 400": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Error con formato {fecha, estado, mensaje}": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				16
+			],
+			"allTests": [
+				{
+					"Validación: 400": true,
+					"Error con formato {fecha, estado, mensaje}": true
+				}
+			]
+		},
+		{
+			"id": "5287a6a9-58cd-4974-b390-7272a553d3a9",
+			"name": "07 Consultar mantenimientos (200)",
+			"url": "http://localhost:8080/mantenimientos",
+			"time": 35,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Listado: 200": true
+			},
+			"testPassFailCounts": {
+				"Listado: 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				35
+			],
+			"allTests": [
+				{
+					"Listado: 200": true
+				}
+			]
+		},
+		{
+			"id": "a06a15f1-d6b4-4082-a3a0-c10415781ca8",
+			"name": "08 Historial de un vehículo (200)",
+			"url": "http://localhost:8080/mantenimientos/vehiculo/3",
+			"time": 728,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Historial: 200": true,
+				"Tiene al menos un mantenimiento": true
+			},
+			"testPassFailCounts": {
+				"Historial: 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Tiene al menos un mantenimiento": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				728
+			],
+			"allTests": [
+				{
+					"Historial: 200": true,
+					"Tiene al menos un mantenimiento": true
+				}
+			]
+		},
+		{
+			"id": "fb5a1cc4-8b88-41e2-b742-f519da6c0ba7",
+			"name": "09 Terminar mantenimiento: volver a DISPONIBLE (200)",
+			"url": "http://localhost:8080/vehiculos/3",
+			"time": 53,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Vehículo actualizado: 200": true,
+				"Estado DISPONIBLE": true
+			},
+			"testPassFailCounts": {
+				"Vehículo actualizado: 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Estado DISPONIBLE": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				53
+			],
+			"allTests": [
+				{
+					"Vehículo actualizado: 200": true,
+					"Estado DISPONIBLE": true
+				}
+			]
+		},
+		{
+			"id": "7cb61d40-7e4a-47ff-a84b-22ce901cb7f3",
+			"name": "01 Eliminar cliente con ventas (409)",
+			"url": "http://localhost:8080/clientes/2",
+			"time": 50,
+			"responseCode": {
+				"code": 409,
+				"name": "Conflict"
+			},
+			"tests": {
+				"Rechazado: 409": true,
+				"Error con formato {fecha, estado, mensaje}": true
+			},
+			"testPassFailCounts": {
+				"Rechazado: 409": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Error con formato {fecha, estado, mensaje}": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				50
+			],
+			"allTests": [
+				{
+					"Rechazado: 409": true,
+					"Error con formato {fecha, estado, mensaje}": true
+				}
+			]
+		},
+		{
+			"id": "1f90b74a-1b6a-42c9-90b0-34b77ebc8b97",
+			"name": "03 Crear cliente temporal (201)",
+			"url": "http://localhost:8080/clientes",
+			"time": 33,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {
+				"Cliente creado: 201": true
+			},
+			"testPassFailCounts": {
+				"Cliente creado: 201": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				33
+			],
+			"allTests": [
+				{
+					"Cliente creado: 201": true
+				}
+			]
+		},
+		{
+			"id": "ade74001-8d0b-404a-bdbb-22e33862c45e",
+			"name": "04 Eliminar cliente sin ventas (204)",
+			"url": "http://localhost:8080/clientes/3",
+			"time": 62,
+			"responseCode": {
+				"code": 204,
+				"name": "No Content"
+			},
+			"tests": {
+				"Eliminado: 204": true
+			},
+			"testPassFailCounts": {
+				"Eliminado: 204": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				62
+			],
+			"allTests": [
+				{
+					"Eliminado: 204": true
+				}
+			]
+		},
+		{
+			"id": "6b3ac0a9-1537-4972-8fc5-233c9e01ce63",
+			"name": "05 Crear vehículo temporal (201)",
+			"url": "http://localhost:8080/vehiculos",
+			"time": 47,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {
+				"Vehículo creado: 201": true
+			},
+			"testPassFailCounts": {
+				"Vehículo creado: 201": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				47
+			],
+			"allTests": [
+				{
+					"Vehículo creado: 201": true
+				}
+			]
+		},
+		{
+			"id": "492604ef-cee9-4824-8e25-dd79978be6d0",
+			"name": "02 Eliminar vehículo con mantenimientos (409)",
+			"url": "http://localhost:8080/vehiculos/3",
+			"time": 46,
+			"responseCode": {
+				"code": 409,
+				"name": "Conflict"
+			},
+			"tests": {
+				"Rechazado: 409": true,
+				"Error con formato {fecha, estado, mensaje}": true
+			},
+			"testPassFailCounts": {
+				"Rechazado: 409": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Error con formato {fecha, estado, mensaje}": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				46
+			],
+			"allTests": [
+				{
+					"Rechazado: 409": true,
+					"Error con formato {fecha, estado, mensaje}": true
+				}
+			]
+		},
+		{
+			"id": "1ab6c7d2-6578-4369-9f12-5fdccef1bf64",
+			"name": "06 Eliminar vehículo sin historial (204)",
+			"url": "http://localhost:8080/vehiculos/5",
+			"time": 65,
+			"responseCode": {
+				"code": 204,
+				"name": "No Content"
+			},
+			"tests": {
+				"Eliminado: 204": true
+			},
+			"testPassFailCounts": {
+				"Eliminado: 204": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				65
+			],
+			"allTests": [
+				{
+					"Eliminado: 204": true
+				}
+			]
+		}
+	],
+	"count": 1,
+	"totalTime": 9044,
+	"collection": {
+		"requests": [
+			{
+				"id": "4ec6328e-1dae-4d3e-b172-c2dd70b4b2ed",
+				"method": "POST"
+			},
+			{
+				"id": "8eecf83a-9700-469f-a148-574222c0adde",
+				"method": "POST"
+			},
+			{
+				"id": "52788906-e718-4e48-917b-84b6ebeffc25",
+				"method": "POST"
+			},
+			{
+				"id": "b0fc276e-127a-4567-9526-a4129efb4eba",
+				"method": "POST"
+			},
+			{
+				"id": "d50c6537-4800-4274-9514-e76899fdad42",
+				"method": "GET"
+			},
+			{
+				"id": "019c8c8c-2349-4961-9c42-aeb8907d845d",
+				"method": "GET"
+			},
+			{
+				"id": "fa30d132-72a0-4987-a49b-08357d6c32bb",
+				"method": "PUT"
+			},
+			{
+				"id": "21e9f2c8-45c3-4657-b3d7-8693f5e0a6d8",
+				"method": "GET"
+			},
+			{
+				"id": "a9223ca7-6c5a-4025-8bda-d40d722e13d4",
+				"method": "POST"
+			},
+			{
+				"id": "ee546d6f-31f2-4f17-9b41-f33d0f35712b",
+				"method": "POST"
+			},
+			{
+				"id": "b093d23d-7091-4487-b797-f520f8d9f30a",
+				"method": "POST"
+			},
+			{
+				"id": "2ba2f8de-d1c4-4818-bdf5-aa396c132db1",
+				"method": "POST"
+			},
+			{
+				"id": "5c1bd91e-b937-49fc-b672-2262c54816f3",
+				"method": "POST"
+			},
+			{
+				"id": "a15c01e6-d5da-4a7a-9950-6d8f1a89c58d",
+				"method": "GET"
+			},
+			{
+				"id": "9e142d65-8d68-4982-a6a5-b22daf272311",
+				"method": "GET"
+			},
+			{
+				"id": "8cb3bdd0-297a-47bf-8837-bc423e66e3b8",
+				"method": "POST"
+			},
+			{
+				"id": "1e948052-11e3-4e51-be9d-73a19656beaf",
+				"method": "GET"
+			},
+			{
+				"id": "b6a5b6b9-7132-4c2b-9703-83e4b25b0d9b",
+				"method": "GET"
+			},
+			{
+				"id": "398cc872-bc58-4777-a9e3-ced73916ff40",
+				"method": "PUT"
+			},
+			{
+				"id": "710b1c50-5ceb-44d1-a232-e24645f38f00",
+				"method": "GET"
+			},
+			{
+				"id": "ab174899-3f58-44a3-960c-e670f8744187",
+				"method": "GET"
+			},
+			{
+				"id": "426aa694-e28d-437c-a22c-0ee30b9b3f77",
+				"method": "GET"
+			},
+			{
+				"id": "44592125-4086-4220-a394-b436107ae74f",
+				"method": "POST"
+			},
+			{
+				"id": "ae2a785f-0bba-4396-8f74-612dd18a53ce",
+				"method": "POST"
+			},
+			{
+				"id": "9c75d267-e653-4331-86e3-060d0d2e5ae4",
+				"method": "POST"
+			},
+			{
+				"id": "7b14c9b5-4f88-470b-81cd-6f4cbb5b0ec2",
+				"method": "GET"
+			},
+			{
+				"id": "419b3c1f-0b18-4cf2-887e-793b476765d6",
+				"method": "POST"
+			},
+			{
+				"id": "2c58629a-aa2c-401b-9844-33bc0f51d175",
+				"method": "POST"
+			},
+			{
+				"id": "521ede03-0631-4f5a-8467-c4347141410c",
+				"method": "GET"
+			},
+			{
+				"id": "b383fd79-ce48-4d8a-9a8d-9a62dd9f77ff",
+				"method": "POST"
+			},
+			{
+				"id": "e9eede66-212f-4bd9-84e1-76d502056eef",
+				"method": "GET"
+			},
+			{
+				"id": "2a7eb3f9-c937-46a1-822f-ecec2328e0fc",
+				"method": "POST"
+			},
+			{
+				"id": "efdab811-9582-4821-9625-7806585936a5",
+				"method": "POST"
+			},
+			{
+				"id": "5c83915c-4b8a-4e93-84d4-bf2e843c0838",
+				"method": "POST"
+			},
+			{
+				"id": "4d2f18e2-5e15-4801-8fd6-cd8c681544a8",
+				"method": "POST"
+			},
+			{
+				"id": "5287a6a9-58cd-4974-b390-7272a553d3a9",
+				"method": "GET"
+			},
+			{
+				"id": "a06a15f1-d6b4-4082-a3a0-c10415781ca8",
+				"method": "GET"
+			},
+			{
+				"id": "fb5a1cc4-8b88-41e2-b742-f519da6c0ba7",
+				"method": "PUT"
+			},
+			{
+				"id": "7cb61d40-7e4a-47ff-a84b-22ce901cb7f3",
+				"method": "DELETE"
+			},
+			{
+				"id": "1f90b74a-1b6a-42c9-90b0-34b77ebc8b97",
+				"method": "POST"
+			},
+			{
+				"id": "ade74001-8d0b-404a-bdbb-22e33862c45e",
+				"method": "DELETE"
+			},
+			{
+				"id": "6b3ac0a9-1537-4972-8fc5-233c9e01ce63",
+				"method": "POST"
+			},
+			{
+				"id": "492604ef-cee9-4824-8e25-dd79978be6d0",
+				"method": "DELETE"
+			},
+			{
+				"id": "1ab6c7d2-6578-4369-9f12-5fdccef1bf64",
+				"method": "DELETE"
+			}
+		]
+	}
+}

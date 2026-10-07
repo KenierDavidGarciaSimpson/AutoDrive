@@ -1,0 +1,1821 @@
+{
+  "info": {
+    "_postman_id": "fb04b719-5500-4cbb-b43a-d5dacb86c9d6",
+    "name": "AutoDrive Motors - API REST",
+    "description": "Pruebas de la API de AutoDrive Motors. Ejecutar en orden (Run collection): cada carpeta usa los datos creados por la anterior. Requiere el proyecto corriendo en localhost:8080.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Clientes",
+      "item": [
+        {
+          "name": "01 Registrar cliente (201)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/clientes",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "clientes"
+              ]
+            },
+            "description": "RF01. Registro exitoso. Guarda el id en la variable clienteId.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Ana Torres\",\n  \"documento\": \"1047000001\",\n  \"correo\": \"{{correoCliente}}\",\n  \"telefono\": \"3001234567\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Cliente creado: 201\", function () { pm.response.to.have.status(201); });",
+                  "if (pm.response.code === 201) { pm.collectionVariables.set(\"clienteId\", pm.response.json().id); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "02 Correo repetido (409 - RN4)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/clientes",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "clientes"
+              ]
+            },
+            "description": "RN4: no se permiten correos repetidos.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Otra Persona\",\n  \"documento\": \"1047000002\",\n  \"correo\": \"{{correoCliente}}\",\n  \"telefono\": \"3007654321\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Correo repetido rechazado: 409\", function () { pm.response.to.have.status(409); });",
+                  "pm.test(\"Error con formato {fecha, estado, mensaje}\", function () {",
+                  "    const j = pm.response.json();",
+                  "    pm.expect(j).to.have.property(\"fecha\");",
+                  "    pm.expect(j).to.have.property(\"estado\");",
+                  "    pm.expect(j).to.have.property(\"mensaje\");",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "03 Correo inválido (400)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/clientes",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "clientes"
+              ]
+            },
+            "description": "Validación de entrada con @Email.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Sin Correo\",\n  \"documento\": \"1047000003\",\n  \"correo\": \"esto-no-es-un-correo\",\n  \"telefono\": \"3000000000\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Validación: 400\", function () { pm.response.to.have.status(400); });",
+                  "pm.test(\"Error con formato {fecha, estado, mensaje}\", function () {",
+                  "    const j = pm.response.json();",
+                  "    pm.expect(j).to.have.property(\"fecha\");",
+                  "    pm.expect(j).to.have.property(\"estado\");",
+                  "    pm.expect(j).to.have.property(\"mensaje\");",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "04 Campos vacíos (400)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/clientes",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "clientes"
+              ]
+            },
+            "description": "Validación de entrada con @NotBlank.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"\",\n  \"documento\": \"\",\n  \"correo\": \"\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Validación: 400\", function () { pm.response.to.have.status(400); });",
+                  "pm.test(\"Error con formato {fecha, estado, mensaje}\", function () {",
+                  "    const j = pm.response.json();",
+                  "    pm.expect(j).to.have.property(\"fecha\");",
+                  "    pm.expect(j).to.have.property(\"estado\");",
+                  "    pm.expect(j).to.have.property(\"mensaje\");",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "05 Consultar clientes (200)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/clientes",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "clientes"
+              ]
+            },
+            "description": "RF02."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Listado: 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "06 Consultar cliente por id (200)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/clientes/{{clienteId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "clientes",
+                "{{clienteId}}"
+              ]
+            },
+            "description": ""
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Cliente encontrado: 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "07 Actualizar cliente (200)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/clientes/{{clienteId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "clientes",
+                "{{clienteId}}"
+              ]
+            },
+            "description": "RF03.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Ana María Torres\",\n  \"documento\": \"1047000001\",\n  \"correo\": \"{{correoCliente}}\",\n  \"telefono\": \"3009998888\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Cliente actualizado: 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Nombre actualizado\", function () { pm.expect(pm.response.json().nombre).to.eql(\"Ana María Torres\"); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "08 Cliente inexistente (404)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/clientes/999999",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "clientes",
+                "999999"
+              ]
+            },
+            "description": ""
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"No encontrado: 404\", function () { pm.response.to.have.status(404); });",
+                  "pm.test(\"Error con formato {fecha, estado, mensaje}\", function () {",
+                  "    const j = pm.response.json();",
+                  "    pm.expect(j).to.have.property(\"fecha\");",
+                  "    pm.expect(j).to.have.property(\"estado\");",
+                  "    pm.expect(j).to.have.property(\"mensaje\");",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "2. Vehículos",
+      "item": [
+        {
+          "name": "01 Registrar vehículo < 100M (201)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/vehiculos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "vehiculos"
+              ]
+            },
+            "description": "RF05. Vehículo de $80.000.000 (sin descuento al venderlo).",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"placa\": \"{{placaBarato}}\",\n  \"marca\": \"Toyota\",\n  \"modelo\": \"Corolla\",\n  \"anio\": 2024,\n  \"precio\": 80000000\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Vehículo creado: 201\", function () { pm.response.to.have.status(201); });",
+                  "if (pm.response.code === 201) { pm.collectionVariables.set(\"vehiculoBaratoId\", pm.response.json().id); }",
+                  "pm.test(\"Queda DISPONIBLE\", function () { pm.expect(pm.response.json().estado).to.eql(\"DISPONIBLE\"); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "02 Registrar vehículo > 100M (201)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/vehiculos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "vehiculos"
+              ]
+            },
+            "description": "Vehículo de $150.000.000 (con descuento del 5%).",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"placa\": \"{{placaCaro}}\",\n  \"marca\": \"Toyota\",\n  \"modelo\": \"Land Cruiser\",\n  \"anio\": 2024,\n  \"precio\": 150000000\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Vehículo creado: 201\", function () { pm.response.to.have.status(201); });",
+                  "if (pm.response.code === 201) { pm.collectionVariables.set(\"vehiculoCaroId\", pm.response.json().id); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "03 Registrar vehículo = 100M (201)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/vehiculos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "vehiculos"
+              ]
+            },
+            "description": "Vehículo de exactamente $100.000.000 (sin descuento).",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"placa\": \"{{placaLimite}}\",\n  \"marca\": \"Mazda\",\n  \"modelo\": \"CX-90\",\n  \"anio\": 2024,\n  \"precio\": 100000000\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Vehículo creado: 201\", function () { pm.response.to.have.status(201); });",
+                  "if (pm.response.code === 201) { pm.collectionVariables.set(\"vehiculoLimiteId\", pm.response.json().id); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "04 Registrar vehículo para taller (201)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/vehiculos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "vehiculos"
+              ]
+            },
+            "description": "Se usa en las pruebas de mantenimiento.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"placa\": \"{{placaTaller}}\",\n  \"marca\": \"Renault\",\n  \"modelo\": \"Duster\",\n  \"anio\": 2024,\n  \"precio\": 60000000\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Vehículo creado: 201\", function () { pm.response.to.have.status(201); });",
+                  "if (pm.response.code === 201) { pm.collectionVariables.set(\"vehiculoTallerId\", pm.response.json().id); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "05 Placa repetida (409 - RN3)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/vehiculos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "vehiculos"
+              ]
+            },
+            "description": "RN3: la placa debe ser única.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"placa\": \"{{placaBarato}}\",\n  \"marca\": \"Kia\",\n  \"modelo\": \"Picanto\",\n  \"anio\": 2024,\n  \"precio\": 50000000\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Placa repetida rechazada: 409\", function () { pm.response.to.have.status(409); });",
+                  "pm.test(\"Error con formato {fecha, estado, mensaje}\", function () {",
+                  "    const j = pm.response.json();",
+                  "    pm.expect(j).to.have.property(\"fecha\");",
+                  "    pm.expect(j).to.have.property(\"estado\");",
+                  "    pm.expect(j).to.have.property(\"mensaje\");",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "06 Precio negativo (400 - RN2)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/vehiculos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "vehiculos"
+              ]
+            },
+            "description": "RN2: no se permiten precios negativos.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"placa\": \"NEG001\",\n  \"marca\": \"Kia\",\n  \"modelo\": \"Rio\",\n  \"anio\": 2024,\n  \"precio\": -5000000\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Precio negativo rechazado: 400\", function () { pm.response.to.have.status(400); });",
+                  "pm.test(\"Error con formato {fecha, estado, mensaje}\", function () {",
+                  "    const j = pm.response.json();",
+                  "    pm.expect(j).to.have.property(\"fecha\");",
+                  "    pm.expect(j).to.have.property(\"estado\");",
+                  "    pm.expect(j).to.have.property(\"mensaje\");",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "07 Consultar vehículos (200)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/vehiculos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "vehiculos"
+              ]
+            },
+            "description": "RF06."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Listado: 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "08 Consultar disponibles (200)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/vehiculos/disponibles",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "vehiculos",
+                "disponibles"
+              ]
+            },
+            "description": "RF10."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Listado: 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Todos están DISPONIBLE\", function () { pm.response.json().forEach(v => pm.expect(v.estado).to.eql(\"DISPONIBLE\")); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "09 Consultar por marca (200)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/vehiculos/marca/Toyota",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "vehiculos",
+                "marca",
+                "Toyota"
+              ]
+            },
+            "description": "RF09."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Listado: 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Todos son Toyota\", function () { pm.response.json().forEach(v => pm.expect(v.marca.toLowerCase()).to.eql(\"toyota\")); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "10 Consultar vehículo por id (200)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/vehiculos/{{vehiculoBaratoId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "vehiculos",
+                "{{vehiculoBaratoId}}"
+              ]
+            },
+            "description": ""
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Vehículo encontrado: 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "11 Actualizar vehículo (200)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/vehiculos/{{vehiculoBaratoId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "vehiculos",
+                "{{vehiculoBaratoId}}"
+              ]
+            },
+            "description": "RF07.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"placa\": \"{{placaBarato}}\",\n  \"marca\": \"Toyota\",\n  \"modelo\": \"Corolla Cross\",\n  \"anio\": 2024,\n  \"precio\": 80000000\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Vehículo actualizado: 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "12 Vehículo inexistente (404)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/vehiculos/999999",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "vehiculos",
+                "999999"
+              ]
+            },
+            "description": ""
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"No encontrado: 404\", function () { pm.response.to.have.status(404); });",
+                  "pm.test(\"Error con formato {fecha, estado, mensaje}\", function () {",
+                  "    const j = pm.response.json();",
+                  "    pm.expect(j).to.have.property(\"fecha\");",
+                  "    pm.expect(j).to.have.property(\"estado\");",
+                  "    pm.expect(j).to.have.property(\"mensaje\");",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "3. Tasa de cambio (API externa)",
+      "item": [
+        {
+          "name": "01 Consultar tasa de cambio (200)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/tasa-cambio",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "tasa-cambio"
+              ]
+            },
+            "description": "RF18. Requiere internet. Si la API externa falla, responde 503."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Tasa obtenida: 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Trae la tasa COP por USD\", function () { pm.expect(pm.response.json().copPorUsd).to.be.above(0); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "02 Precio del vehículo en USD (200)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/vehiculos/{{vehiculoCaroId}}/precio-usd",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "vehiculos",
+                "{{vehiculoCaroId}}",
+                "precio-usd"
+              ]
+            },
+            "description": "RF19. Convierte el precio de COP a USD."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Conversión: 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"precioUsd = precioCop / tasa\", function () {",
+                  "    const j = pm.response.json();",
+                  "    pm.expect(j.precioUsd).to.be.closeTo(j.precioCop / j.tasaCopPorUsd, 1);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "4. Ventas",
+      "item": [
+        {
+          "name": "01 Venta sin descuento < 100M (201)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/ventas",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "ventas"
+              ]
+            },
+            "description": "RF11, RF12, RN5. La fecha y el total se generan solos.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"clienteId\": {{clienteId}},\n  \"vehiculoId\": {{vehiculoBaratoId}}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Venta creada: 201\", function () { pm.response.to.have.status(201); });",
+                  "pm.test(\"Sin descuento y total = precio\", function () {",
+                  "    const j = pm.response.json();",
+                  "    pm.expect(j.descuento).to.eql(0);",
+                  "    pm.expect(j.total).to.eql(80000000);",
+                  "    pm.expect(j.fecha).to.not.be.null;",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "02 Venta con descuento > 100M (201 - RN6)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/ventas",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "ventas"
+              ]
+            },
+            "description": "RN6: 5% de descuento si el valor supera $100.000.000.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"clienteId\": {{clienteId}},\n  \"vehiculoId\": {{vehiculoCaroId}}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Venta creada: 201\", function () { pm.response.to.have.status(201); });",
+                  "pm.test(\"Descuento del 5%: 7.500.000 y total 142.500.000\", function () {",
+                  "    const j = pm.response.json();",
+                  "    pm.expect(j.descuento).to.eql(7500000);",
+                  "    pm.expect(j.total).to.eql(142500000);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "03 Venta de exactamente 100M (201 - sin descuento)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/ventas",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "ventas"
+              ]
+            },
+            "description": "RN6 dice 'supera': con exactamente $100.000.000 no aplica.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"clienteId\": {{clienteId}},\n  \"vehiculoId\": {{vehiculoLimiteId}}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Venta creada: 201\", function () { pm.response.to.have.status(201); });",
+                  "pm.test(\"En el límite no hay descuento\", function () { pm.expect(pm.response.json().descuento).to.eql(0); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "04 Vender vehículo ya vendido (409 - RN1)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/ventas",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "ventas"
+              ]
+            },
+            "description": "RN1: no se vende un vehículo VENDIDO.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"clienteId\": {{clienteId}},\n  \"vehiculoId\": {{vehiculoBaratoId}}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Venta rechazada: 409\", function () { pm.response.to.have.status(409); });",
+                  "pm.test(\"Error con formato {fecha, estado, mensaje}\", function () {",
+                  "    const j = pm.response.json();",
+                  "    pm.expect(j).to.have.property(\"fecha\");",
+                  "    pm.expect(j).to.have.property(\"estado\");",
+                  "    pm.expect(j).to.have.property(\"mensaje\");",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "05 Estado cambió a VENDIDO (200 - RF13)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/vehiculos/{{vehiculoBaratoId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "vehiculos",
+                "{{vehiculoBaratoId}}"
+              ]
+            },
+            "description": "RF13: la venta cambia el estado del vehículo."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Vehículo encontrado: 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Estado VENDIDO\", function () { pm.expect(pm.response.json().estado).to.eql(\"VENDIDO\"); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "06 Cliente inexistente (404)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/ventas",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "ventas"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"clienteId\": 999999,\n  \"vehiculoId\": {{vehiculoTallerId}}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"No encontrado: 404\", function () { pm.response.to.have.status(404); });",
+                  "pm.test(\"Error con formato {fecha, estado, mensaje}\", function () {",
+                  "    const j = pm.response.json();",
+                  "    pm.expect(j).to.have.property(\"fecha\");",
+                  "    pm.expect(j).to.have.property(\"estado\");",
+                  "    pm.expect(j).to.have.property(\"mensaje\");",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "07 Consultar ventas (200)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/ventas",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "ventas"
+              ]
+            },
+            "description": "RF14."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Listado: 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "5. Mantenimientos",
+      "item": [
+        {
+          "name": "01 Registrar mantenimiento (201)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/mantenimientos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "mantenimientos"
+              ]
+            },
+            "description": "RF15. Sin fecha: toma la del día.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"vehiculoId\": {{vehiculoTallerId}},\n  \"descripcion\": \"Cambio de aceite y revisión de frenos\",\n  \"costo\": 450000\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Mantenimiento creado: 201\", function () { pm.response.to.have.status(201); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "02 Estado cambió a EN_MANTENIMIENTO (200 - RF17)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/vehiculos/{{vehiculoTallerId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "vehiculos",
+                "{{vehiculoTallerId}}"
+              ]
+            },
+            "description": ""
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Vehículo encontrado: 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Estado EN_MANTENIMIENTO\", function () { pm.expect(pm.response.json().estado).to.eql(\"EN_MANTENIMIENTO\"); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "03 Vender vehículo en mantenimiento (409 - RN1)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/ventas",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "ventas"
+              ]
+            },
+            "description": "RN1: no se vende un vehículo EN_MANTENIMIENTO.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"clienteId\": {{clienteId}},\n  \"vehiculoId\": {{vehiculoTallerId}}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Venta rechazada: 409\", function () { pm.response.to.have.status(409); });",
+                  "pm.test(\"Error con formato {fecha, estado, mensaje}\", function () {",
+                  "    const j = pm.response.json();",
+                  "    pm.expect(j).to.have.property(\"fecha\");",
+                  "    pm.expect(j).to.have.property(\"estado\");",
+                  "    pm.expect(j).to.have.property(\"mensaje\");",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "04 Mantenimiento a vehículo ya en mantenimiento (409)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/mantenimientos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "mantenimientos"
+              ]
+            },
+            "description": "Acuerdo del grupo.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"vehiculoId\": {{vehiculoTallerId}},\n  \"descripcion\": \"Alineación\",\n  \"costo\": 80000\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Rechazado: 409\", function () { pm.response.to.have.status(409); });",
+                  "pm.test(\"Error con formato {fecha, estado, mensaje}\", function () {",
+                  "    const j = pm.response.json();",
+                  "    pm.expect(j).to.have.property(\"fecha\");",
+                  "    pm.expect(j).to.have.property(\"estado\");",
+                  "    pm.expect(j).to.have.property(\"mensaje\");",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "05 Mantenimiento a vehículo vendido (409)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/mantenimientos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "mantenimientos"
+              ]
+            },
+            "description": "Acuerdo del grupo.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"vehiculoId\": {{vehiculoBaratoId}},\n  \"descripcion\": \"Revisión general\",\n  \"costo\": 100000\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Rechazado: 409\", function () { pm.response.to.have.status(409); });",
+                  "pm.test(\"Error con formato {fecha, estado, mensaje}\", function () {",
+                  "    const j = pm.response.json();",
+                  "    pm.expect(j).to.have.property(\"fecha\");",
+                  "    pm.expect(j).to.have.property(\"estado\");",
+                  "    pm.expect(j).to.have.property(\"mensaje\");",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "06 Costo negativo (400)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/mantenimientos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "mantenimientos"
+              ]
+            },
+            "description": "Acuerdo del grupo: el costo no puede ser negativo.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"vehiculoId\": {{vehiculoTallerId}},\n  \"descripcion\": \"Prueba\",\n  \"costo\": -1000\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Validación: 400\", function () { pm.response.to.have.status(400); });",
+                  "pm.test(\"Error con formato {fecha, estado, mensaje}\", function () {",
+                  "    const j = pm.response.json();",
+                  "    pm.expect(j).to.have.property(\"fecha\");",
+                  "    pm.expect(j).to.have.property(\"estado\");",
+                  "    pm.expect(j).to.have.property(\"mensaje\");",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "07 Consultar mantenimientos (200)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/mantenimientos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "mantenimientos"
+              ]
+            },
+            "description": "RF16."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Listado: 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "08 Historial de un vehículo (200)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/mantenimientos/vehiculo/{{vehiculoTallerId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "mantenimientos",
+                "vehiculo",
+                "{{vehiculoTallerId}}"
+              ]
+            },
+            "description": "RF16."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Historial: 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Tiene al menos un mantenimiento\", function () { pm.expect(pm.response.json().length).to.be.above(0); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "09 Terminar mantenimiento: volver a DISPONIBLE (200)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/vehiculos/{{vehiculoTallerId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "vehiculos",
+                "{{vehiculoTallerId}}"
+              ]
+            },
+            "description": "Acuerdo del grupo: el vehículo vuelve a DISPONIBLE con PUT /vehiculos/{id}.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"placa\": \"{{placaTaller}}\",\n  \"marca\": \"Renault\",\n  \"modelo\": \"Duster\",\n  \"anio\": 2024,\n  \"precio\": 60000000,\n  \"estado\": \"DISPONIBLE\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Vehículo actualizado: 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Estado DISPONIBLE\", function () { pm.expect(pm.response.json().estado).to.eql(\"DISPONIBLE\"); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "6. Eliminaciones",
+      "item": [
+        {
+          "name": "01 Eliminar cliente con ventas (409)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/clientes/{{clienteId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "clientes",
+                "{{clienteId}}"
+              ]
+            },
+            "description": "Acuerdo del grupo."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Rechazado: 409\", function () { pm.response.to.have.status(409); });",
+                  "pm.test(\"Error con formato {fecha, estado, mensaje}\", function () {",
+                  "    const j = pm.response.json();",
+                  "    pm.expect(j).to.have.property(\"fecha\");",
+                  "    pm.expect(j).to.have.property(\"estado\");",
+                  "    pm.expect(j).to.have.property(\"mensaje\");",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "02 Eliminar vehículo con mantenimientos (409)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/vehiculos/{{vehiculoTallerId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "vehiculos",
+                "{{vehiculoTallerId}}"
+              ]
+            },
+            "description": "Acuerdo del grupo."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Rechazado: 409\", function () { pm.response.to.have.status(409); });",
+                  "pm.test(\"Error con formato {fecha, estado, mensaje}\", function () {",
+                  "    const j = pm.response.json();",
+                  "    pm.expect(j).to.have.property(\"fecha\");",
+                  "    pm.expect(j).to.have.property(\"estado\");",
+                  "    pm.expect(j).to.have.property(\"mensaje\");",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "03 Crear cliente temporal (201)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/clientes",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "clientes"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Cliente Temporal\",\n  \"documento\": \"1047999999\",\n  \"correo\": \"{{correoTemporal}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Cliente creado: 201\", function () { pm.response.to.have.status(201); });",
+                  "if (pm.response.code === 201) { pm.collectionVariables.set(\"clienteTemporalId\", pm.response.json().id); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "04 Eliminar cliente sin ventas (204)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/clientes/{{clienteTemporalId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "clientes",
+                "{{clienteTemporalId}}"
+              ]
+            },
+            "description": "RF04."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Eliminado: 204\", function () { pm.response.to.have.status(204); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "05 Crear vehículo temporal (201)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/vehiculos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "vehiculos"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"placa\": \"{{placaTemporal}}\",\n  \"marca\": \"Chevrolet\",\n  \"modelo\": \"Onix\",\n  \"anio\": 2024,\n  \"precio\": 70000000\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Vehículo creado: 201\", function () { pm.response.to.have.status(201); });",
+                  "if (pm.response.code === 201) { pm.collectionVariables.set(\"vehiculoTemporalId\", pm.response.json().id); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "06 Eliminar vehículo sin historial (204)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/vehiculos/{{vehiculoTemporalId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "vehiculos",
+                "{{vehiculoTemporalId}}"
+              ]
+            },
+            "description": "RF08."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Eliminado: 204\", function () { pm.response.to.have.status(204); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Genera placas y correos únicos en cada ejecución completa,",
+          "// para poder correr la colección varias veces sin errores de duplicados.",
+          "if (!pm.collectionVariables.get(\"sufijo\") || pm.info.requestName.startsWith(\"01 Registrar cliente\")) {",
+          "    const s = String(Date.now()).slice(-5);",
+          "    pm.collectionVariables.set(\"sufijo\", s);",
+          "    pm.collectionVariables.set(\"correoCliente\", \"ana\" + s + \"@correo.com\");",
+          "    pm.collectionVariables.set(\"correoTemporal\", \"temporal\" + s + \"@correo.com\");",
+          "    pm.collectionVariables.set(\"placaBarato\", \"BAR\" + s);",
+          "    pm.collectionVariables.set(\"placaCaro\", \"CAR\" + s);",
+          "    pm.collectionVariables.set(\"placaLimite\", \"LIM\" + s);",
+          "    pm.collectionVariables.set(\"placaTaller\", \"TAL\" + s);",
+          "    pm.collectionVariables.set(\"placaTemporal\", \"TMP\" + s);",
+          "}"
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "clienteId",
+      "value": ""
+    },
+    {
+      "key": "clienteTemporalId",
+      "value": ""
+    },
+    {
+      "key": "vehiculoBaratoId",
+      "value": ""
+    },
+    {
+      "key": "vehiculoCaroId",
+      "value": ""
+    },
+    {
+      "key": "vehiculoLimiteId",
+      "value": ""
+    },
+    {
+      "key": "vehiculoTallerId",
+      "value": ""
+    },
+    {
+      "key": "vehiculoTemporalId",
+      "value": ""
+    }
+  ]
+}
