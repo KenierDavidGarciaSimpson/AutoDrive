@@ -15,14 +15,11 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.time.LocalDateTime;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 
-/**
- * Manejo centralizado de excepciones.
- * Todas las respuestas usan el formato {"fecha": "...", "estado": 404, "mensaje": "..."}.
- * 400 datos inválidos | 404 no encontrado | 409 regla de negocio |
- * 503 API externa | 500 error inesperado.
- */
+
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -44,33 +41,40 @@ public class GlobalExceptionHandler {
         return construir(HttpStatus.SERVICE_UNAVAILABLE, ex.getMessage());
     }
 
-    // Falla de @Valid: el mensaje lista cada campo con su error
+    
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> validacion(MethodArgumentNotValidException ex) {
-        String mensaje = ex.getBindingResult().getFieldErrors().stream()
-                .map(e -> e.getField() + ": " + e.getDefaultMessage())
-                .distinct()
+        Map<String, String> errores = new LinkedHashMap<>();
+        ex.getBindingResult().getFieldErrors()
+                .forEach(e -> errores.putIfAbsent(e.getField(), e.getDefaultMessage()));
+
+        String mensaje = errores.entrySet().stream()
+                .map(e -> e.getKey() + ": " + e.getValue())
                 .collect(Collectors.joining("; "));
         if (mensaje.isBlank()) {
             mensaje = "Hay errores de validación en los datos enviados";
         }
-        return construir(HttpStatus.BAD_REQUEST, mensaje);
+
+        ErrorResponse cuerpo = new ErrorResponse(
+                LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(), mensaje,
+                errores.isEmpty() ? null : errores);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(cuerpo);
     }
 
-    // JSON mal formado, tipos incorrectos, fechas o estados inválidos
+   
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ErrorResponse> jsonInvalido(HttpMessageNotReadableException ex) {
         return construir(HttpStatus.BAD_REQUEST, "El cuerpo de la petición no es un JSON válido");
     }
 
-    // Por ejemplo GET /clientes/abc
+    
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<ErrorResponse> tipoIncorrecto(MethodArgumentTypeMismatchException ex) {
         return construir(HttpStatus.BAD_REQUEST,
                 "El parámetro '" + ex.getName() + "' tiene un valor no válido");
     }
 
-    // Red de seguridad: correo o placa duplicados que escapen a las validaciones, claves foráneas
+   
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<ErrorResponse> integridad(DataIntegrityViolationException ex) {
         log.warn("Violación de integridad: {}", ex.getMostSpecificCause().getMessage());
@@ -88,7 +92,7 @@ public class GlobalExceptionHandler {
         return construir(HttpStatus.NOT_FOUND, "La ruta solicitada no existe");
     }
 
-    // Último recurso: no se expone el detalle interno al cliente
+   
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> inesperado(Exception ex) {
         log.error("Error inesperado", ex);

@@ -1,11 +1,18 @@
 package com.autodrive.motors.dto;
 
-import java.time.LocalDateTime;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
-/** Formato de error acordado por el grupo (acuerdo 16). */
+import java.time.LocalDateTime;
+import java.util.Map;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public record ErrorResponse(
         LocalDateTime fecha,
         int estado,
-        String mensaje
+        String mensaje,
+        Map<String, String> errores
 ) {
+    public ErrorResponse(LocalDateTime fecha, int estado, String mensaje) {
+        this(fecha, estado, mensaje, null);
+    }
 }
