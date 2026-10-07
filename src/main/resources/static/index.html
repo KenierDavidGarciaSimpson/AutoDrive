@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>AutoDrive Motors</title>
+  <meta name="description" content="Sistema de gestión vehicular de AutoDrive Motors: vehículos, clientes, ventas y mantenimientos.">
+
+
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#EEF0F3" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0F131A" media="(prefers-color-scheme: dark)">
+
+  <!-- Icono de pestaña: placa amarilla colombiana, sin archivo aparte -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='2' y='8' width='28' height='16' rx='3' fill='%23FCD116' stroke='%231C2430' stroke-width='2'/%3E%3Cpath d='M8 16h16' stroke='%231C2430' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+
+  <!-- El orden importa: tokens (valores) -> base (estructura) -> componentes -->
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+  <a class="saltar" href="#contenido">Saltar al contenido</a>
+
+  <div class="app">
+    <!-- Móvil: marca arriba y pestañas abajo. Escritorio: barra lateral. Un solo <nav>. -->
+    <div class="lateral">
+      <a class="marca" href="#/panel" aria-label="AutoDrive Motors, ir al panel principal">
+        <span class="marca__nombre">AutoDrive</span>
+        <span class="marca__apellido">Motors</span>
+      </a>
+
+      <nav class="navegacion" aria-label="Secciones principales">
+        <ul class="navegacion__lista" id="menu-lista"></ul>
+      </nav>
+    </div>
+
+    <main class="contenido" id="contenido" tabindex="-1">
+     
+      <noscript>
+        <p>Esta aplicación necesita JavaScript. Actívalo en tu navegador e intenta de nuevo.</p>
+      </noscript>
+    </main>
+  </div>
+
+  
+  <div class="avisos" id="avisos" role="status" aria-live="polite"></div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
