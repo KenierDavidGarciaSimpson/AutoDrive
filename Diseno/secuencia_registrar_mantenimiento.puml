@@ -1,0 +1,53 @@
+@startuml
+title Diagrama de secuencia - Registrar mantenimiento
+autonumber
+
+actor "Jefe de taller" as J
+participant "MantenimientoController" as MC
+participant "MantenimientoService" as MS
+participant "VehiculoRepository" as VeR
+participant "MantenimientoRepository" as MR
+database "PostgreSQL" as DB
+
+J -> MC : POST /mantenimientos {vehiculoId, fecha, descripcion, costo}
+activate MC
+MC -> MC : validar datos de entrada (@Valid)
+MC -> MS : registrar(mantenimientoRequest)
+activate MS
+
+group @Transactional
+    MS -> VeR : findByIdParaActualizar(vehiculoId)
+    activate VeR
+    VeR -> DB : SELECT vehiculo (con bloqueo)
+    DB --> VeR : resultado
+    VeR --> MS : vehiculo
+    deactivate VeR
+
+    alt vehículo no existe
+        MS --> MC : RecursoNoEncontradoException
+        MC --> J : 404 Not Found
+    else estado = VENDIDO (acuerdo del grupo)
+        MS --> MC : ReglaNegocioException "el vehículo ya fue vendido"
+        MC --> J : 409 Conflict
+    else estado = EN_MANTENIMIENTO (acuerdo del grupo)
+        MS --> MC : ReglaNegocioException "el vehículo ya se encuentra en mantenimiento"
+        MC --> J : 409 Conflict
+    else estado = DISPONIBLE
+        MS -> MS : fecha = la enviada o la fecha actual
+        MS -> MS : vehiculo.estado = EN_MANTENIMIENTO
+
+        MS -> MR : save(mantenimiento)
+        activate MR
+        MR -> DB : INSERT mantenimiento\nUPDATE estado del vehiculo
+        DB --> MR : guardado
+        MR --> MS : mantenimiento
+        deactivate MR
+
+        MS --> MC : MantenimientoResponse
+        MC --> J : 201 Created + datos del mantenimiento
+    end
+end
+
+deactivate MS
+deactivate MC
+@enduml

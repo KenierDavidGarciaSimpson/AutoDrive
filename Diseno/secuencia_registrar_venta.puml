@@ -1,0 +1,77 @@
+@startuml
+title Diagrama de secuencia - Registrar venta
+autonumber
+
+actor "Asesor de ventas" as A
+participant "VentaController" as VC
+participant "VentaService" as VS
+participant "ClienteRepository" as CR
+participant "VehiculoRepository" as VeR
+participant "VentaRepository" as VR
+database "PostgreSQL" as DB
+
+A -> VC : POST /ventas {clienteId, vehiculoId}
+activate VC
+VC -> VC : validar datos de entrada (@Valid)
+VC -> VS : registrar(ventaRequest)
+activate VS
+
+group @Transactional
+    VS -> CR : findById(clienteId)
+    activate CR
+    CR -> DB : SELECT cliente
+    DB --> CR : resultado
+    CR --> VS : cliente
+    deactivate CR
+
+    alt cliente no existe
+        VS --> VC : RecursoNoEncontradoException
+        VC --> A : 404 Not Found
+    else cliente existe
+        VS -> VeR : findByIdParaActualizar(vehiculoId)
+        activate VeR
+        VeR -> DB : SELECT vehiculo (con bloqueo)
+        DB --> VeR : resultado
+        VeR --> VS : vehiculo
+        deactivate VeR
+
+        alt vehículo no existe
+            VS --> VC : RecursoNoEncontradoException
+            VC --> A : 404 Not Found
+        else estado = VENDIDO o EN_MANTENIMIENTO (RN1)
+            VS --> VC : ReglaNegocioException
+            VC --> A : 409 Conflict
+        else estado = DISPONIBLE
+            VS -> VR : existsByVehiculoId(vehiculoId)
+            activate VR
+            VR -> DB : SELECT venta del vehiculo
+            DB --> VR : resultado
+            VR --> VS : true / false
+            deactivate VR
+
+            alt el vehículo ya tiene una venta
+                VS --> VC : ReglaNegocioException
+                VC --> A : 409 Conflict
+            else sin venta previa
+                VS -> VS : calcularDescuento(precio)\n5% solo si precio > 100.000.000 COP (RN6)
+                VS -> VS : total = precio - descuento (RN5)
+                VS -> VS : vehiculo.estado = VENDIDO
+
+                VS -> VR : save(venta)
+                activate VR
+                VR -> VR : @PrePersist: fecha = fecha y hora actual (RN5)
+                VR -> DB : INSERT venta\nUPDATE estado del vehiculo
+                DB --> VR : guardado
+                VR --> VS : venta
+                deactivate VR
+
+                VS --> VC : VentaResponse
+                VC --> A : 201 Created + datos de la venta
+            end
+        end
+    end
+end
+
+deactivate VS
+deactivate VC
+@enduml

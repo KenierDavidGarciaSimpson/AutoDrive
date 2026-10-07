@@ -1,0 +1,49 @@
+@startuml
+title Diagrama de secuencia - Registrar cliente
+autonumber
+
+actor "Asesor de ventas" as A
+participant "ClienteController" as CC
+participant "ClienteService" as CS
+participant "ClienteRepository" as CR
+database "PostgreSQL" as DB
+
+A -> CC : POST /clientes {nombre, documento, correo, telefono}
+activate CC
+CC -> CC : validar datos de entrada (@Valid)
+
+alt datos inválidos (campos vacíos o correo con formato incorrecto)
+    CC --> A : 400 Bad Request + campos con error
+else datos válidos
+    CC -> CS : crear(clienteRequest)
+    activate CS
+
+    group @Transactional
+        CS -> CS : normalizar correo
+        CS -> CR : existsByCorreo(correo)
+        activate CR
+        CR -> DB : SELECT cliente por correo
+        DB --> CR : resultado
+        CR --> CS : true / false
+        deactivate CR
+
+        alt el correo ya está registrado (RN4)
+            CS --> CC : ReglaNegocioException
+            CC --> A : 409 Conflict
+        else el correo no existe
+            CS -> CR : save(cliente)
+            activate CR
+            CR -> DB : INSERT cliente
+            DB --> CR : cliente guardado
+            CR --> CS : cliente
+            deactivate CR
+
+            CS --> CC : ClienteResponse
+            CC --> A : 201 Created + datos del cliente
+        end
+    end
+    deactivate CS
+end
+
+deactivate CC
+@enduml
