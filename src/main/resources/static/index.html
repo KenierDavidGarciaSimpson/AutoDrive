@@ -1,52 +1,94 @@
 <!DOCTYPE html>
+<!--
+  AutoDrive Motors - vitrina pública
+  Ruta: src/main/resources/static/index.html
 
+  Spring Boot la entrega en http://localhost:8080/ . El panel de gestión
+  (clientes, ventas, mantenimientos) vive en panel.html.
+  Los vehículos y la tasa de cambio los pinta js/vitrina.js desde la API.
+-->
 <html lang="es">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>AutoDrive Motors</title>
-  <meta name="description" content="Sistema de gestión vehicular de AutoDrive Motors: vehículos, clientes, ventas y mantenimientos.">
-
-
+  <meta name="description" content="Vehículos disponibles en AutoDrive Motors, con precios en pesos colombianos y en dólares.">
   <meta name="color-scheme" content="light dark">
-  <meta name="theme-color" content="#EEF0F3" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#0F131A" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#1D1D1F">
 
-  <!-- Icono de pestaña: placa amarilla colombiana, sin archivo aparte -->
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='2' y='8' width='28' height='16' rx='3' fill='%23FCD116' stroke='%231C2430' stroke-width='2'/%3E%3Cpath d='M8 16h16' stroke='%231C2430' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+  <!-- Icono de pestaña: la placa amarilla, sin archivo aparte -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='2' y='8' width='28' height='16' rx='3' fill='%23FCD116' stroke='%231D1D1F' stroke-width='2'/%3E%3Cpath d='M8 16h16' stroke='%231D1D1F' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
 
-  <!-- El orden importa: tokens (valores) -> base (estructura) -> componentes -->
-  <link rel="stylesheet" href="css/tokens.css">
-  <link rel="stylesheet" href="css/base.css">
-  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/vitrina.css">
 </head>
 <body>
-  <a class="saltar" href="#contenido">Saltar al contenido</a>
+  <a class="saltar" href="#vehiculos">Saltar a los vehículos</a>
 
-  <div class="app">
-    <!-- Móvil: marca arriba y pestañas abajo. Escritorio: barra lateral. Un solo <nav>. -->
-    <div class="lateral">
-      <a class="marca" href="#/panel" aria-label="AutoDrive Motors, ir al panel principal">
-        <span class="marca__nombre">AutoDrive</span>
-        <span class="marca__apellido">Motors</span>
-      </a>
+  <header class="nav">
+    <nav class="nav__barra contenedor" aria-label="Principal">
+      <a class="nav__marca" href="/">AutoDrive Motors</a>
+      <ul class="nav__lista">
+        <li><a href="#vehiculos">Vehículos</a></li>
+        <li><a href="#descuento">Descuento</a></li>
+      </ul>
+      <a class="nav__panel" href="panel.html">Panel<span class="nav__panel-extra">&nbsp;de gestión</span></a>
+    </nav>
+  </header>
 
-      <nav class="navegacion" aria-label="Secciones principales">
-        <ul class="navegacion__lista" id="menu-lista"></ul>
-      </nav>
+  <main>
+    <section class="hero" aria-labelledby="titulo-hero">
+      <div class="contenedor">
+        <h1 class="hero__titulo" id="titulo-hero">Encuentra tu próximo vehículo.</h1>
+        <p class="hero__texto">Inventario al día, con precios en pesos y en dólares, y 5&nbsp;% menos en los de más de $100.000.000.</p>
+        <div class="hero__acciones">
+          <a class="boton boton--primario" href="#vehiculos">Ver vehículos</a>
+          <a class="boton boton--contorno" href="#descuento">Cómo funciona el descuento</a>
+        </div>
+
+        <div class="placa-grande" aria-hidden="true">
+          <span class="placa-grande__codigo">ADM 123</span>
+          <span class="placa-grande__pais">COLOMBIA</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="seccion" id="vehiculos" aria-labelledby="titulo-vehiculos">
+      <div class="contenedor">
+        <h2 class="seccion__titulo" id="titulo-vehiculos">Disponibles ahora.</h2>
+        <p class="seccion__texto" id="tasa"></p>
+
+        <div class="filtros" id="filtros" role="group" aria-label="Filtrar por marca" hidden></div>
+        <p class="solo-lector" id="resumen" aria-live="polite"></p>
+
+        <ul class="tarjetas" id="lista" aria-busy="true"></ul>
+
+        <p class="tarjetas-pie">
+          <a class="enlace-mas" href="panel.html">Registrar una venta en el panel de gestión</a>
+        </p>
+      </div>
+    </section>
+
+    <section class="seccion seccion--suave" id="descuento" aria-labelledby="titulo-descuento">
+      <div class="contenedor">
+        <h2 class="seccion__titulo" id="titulo-descuento">5&nbsp;% menos en vehículos de más de $100.000.000.</h2>
+        <p class="seccion__texto">El descuento se aplica solo, se ve antes de confirmar la venta y no existe para precios de exactamente $100.000.000.</p>
+
+        <dl class="ejemplo" aria-label="Ejemplo con un vehículo de $250.000.000">
+          <div><dt>Precio</dt><dd>$250.000.000</dd></div>
+          <div><dt>Descuento del 5&nbsp;%</dt><dd>−$12.500.000</dd></div>
+          <div class="ejemplo__total"><dt>Total</dt><dd>$237.500.000</dd></div>
+        </dl>
+      </div>
+    </section>
+  </main>
+
+  <footer class="pie">
+    <div class="contenedor">
+      <p>AutoDrive Motors es una empresa ficticia, creada para el taller final de Análisis y Diseño de Software.</p>
+      <p>Los precios están en pesos colombianos. El valor en dólares es aproximado y usa la tasa de cambio vigente.</p>
     </div>
+  </footer>
 
-    <main class="contenido" id="contenido" tabindex="-1">
-     
-      <noscript>
-        <p>Esta aplicación necesita JavaScript. Actívalo en tu navegador e intenta de nuevo.</p>
-      </noscript>
-    </main>
-  </div>
-
-  
-  <div class="avisos" id="avisos" role="status" aria-live="polite"></div>
-
-  <script type="module" src="js/app.js"></script>
+  <script type="module" src="js/vitrina.js"></script>
 </body>
 </html>

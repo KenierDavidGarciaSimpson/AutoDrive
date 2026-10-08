@@ -1,0 +1,277 @@
+/*
+ * AutoDrive Motors - estilos de la vitrina pública
+ * Ruta: src/main/resources/static/css/vitrina.css
+ *
+ * Criterio: contenido sobre decoración. Fondos que alternan negro, blanco y
+ * gris suave; un solo azul para las acciones; el amarillo de la placa como
+ * única seña de marca. Independiente de tokens/base/components.css (panel).
+ */
+
+:root {
+  color-scheme: light dark;
+
+  /* Superficies y texto (claro) */
+  --lienzo: #FFFFFF;
+  --suave: #F5F5F7;
+  --tinta: #1D1D1F;
+  --tinta-2: #6E6E73;      /* 5,1:1 sobre blanco, 4,7:1 sobre --suave */
+  --enlace: #0066CC;
+  --foco: #0066CC;
+  --linea: rgb(128 128 128 / 0.28);
+
+  /* Acción */
+  --boton: #0071E3;        /* blanco encima: 4,7:1 */
+  --boton-hover: #0067C8;
+
+  /* Filtros */
+  --filtro: #F5F5F7;
+  --filtro-texto: #1D1D1F;
+  --filtro-activo: #1D1D1F;
+  --filtro-activo-texto: #FFFFFF;
+
+  /* Marca: la placa amarilla colombiana */
+  --placa: #FCD116;
+  --placa-tinta: #1D1D1F;
+
+  --radio-tarjeta: 1.75rem;
+  --ancho: 77.5rem;
+  --fuente: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
+            "Segoe UI", system-ui, "Helvetica Neue", Arial, sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --lienzo: #000000;
+    --suave: #1D1D1F;
+    --tinta: #F5F5F7;
+    --tinta-2: #A1A1A6;
+    --enlace: #2997FF;
+    --foco: #2997FF;
+    --filtro: #1D1D1F;
+    --filtro-texto: #F5F5F7;
+    --filtro-activo: #F5F5F7;
+    --filtro-activo-texto: #1D1D1F;
+  }
+}
+
+/* ---------- Base ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-padding-top: 4rem;   /* el ancla no queda tapada por la barra fija */
+}
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
+
+body {
+  margin: 0;
+  background: var(--lienzo);
+  color: var(--tinta);
+  font: 400 1.0625rem/1.47 var(--fuente);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, p, ul, dl, dd { margin: 0; }
+ul { padding: 0; list-style: none; }
+a { color: var(--enlace); }
+
+:focus-visible { outline: 3px solid var(--foco); outline-offset: 3px; }
+
+.solo-lector {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap;
+}
+
+.saltar {
+  position: absolute; left: 1rem; top: -5rem; z-index: 30;
+  padding: 0.75rem 1.25rem; border-radius: 62rem;
+  background: var(--boton); color: #FFFFFF; text-decoration: none;
+}
+.saltar:focus { top: 0.75rem; outline-color: #FFFFFF; }
+
+.contenedor { width: min(100% - 2.5rem, var(--ancho)); margin-inline: auto; }
+
+/* ---------- Botones (píldora) ---------- */
+.boton {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: 2.75rem; padding: 0.6875rem 1.375rem;
+  border: 1px solid transparent; border-radius: 62rem; background: none;
+  font: inherit; font-size: 1.0625rem; line-height: 1.1; text-decoration: none; cursor: pointer;
+}
+.boton--primario { background: var(--boton); color: #FFFFFF; }
+.boton--primario:hover { background: var(--boton-hover); }
+.boton--contorno { border-color: #2997FF; color: #2997FF; }   /* se usa sobre el hero negro */
+.boton--contorno:hover { background: rgb(41 151 255 / 0.14); }
+
+/* Enlace con chevrón: el chevrón es decorativo y no se lee */
+.enlace-mas { text-decoration: none; }
+.enlace-mas:hover { text-decoration: underline; }
+.enlace-mas::after { content: "›"; content: "›" / ""; margin-left: 0.3em; }
+
+/* ---------- Barra superior ---------- */
+.nav {
+  position: sticky; top: 0; z-index: 20;
+  background: rgb(29 29 31 / 0.84);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  backdrop-filter: saturate(180%) blur(20px);
+  color: #F5F5F7;
+}
+.nav :focus-visible, .hero :focus-visible { outline-color: #2997FF; }
+
+.nav__barra {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 1.5rem; height: 3rem;
+}
+.nav a {
+  display: inline-flex; align-items: center; min-height: 2.75rem;
+  color: #F5F5F7; text-decoration: none; font-size: 0.875rem;
+}
+.nav__marca { font-size: 1.0625rem; font-weight: 600; letter-spacing: -0.01em; }
+.nav__lista { display: flex; gap: 2rem; }
+.nav__lista a, .nav__panel { opacity: 0.8; }
+.nav__lista a:hover, .nav__panel:hover { opacity: 1; }
+
+@media (max-width: 40rem) {
+  .nav__lista { display: none; }
+  .nav__panel-extra { display: none; }
+}
+
+/* ---------- Hero: negro, tipografía grande y la placa ---------- */
+.hero {
+  padding-block: clamp(3.5rem, 9vw, 7rem) clamp(3.5rem, 8vw, 6rem);
+  background: #000000; color: #F5F5F7; text-align: center; overflow: hidden;
+}
+.hero__titulo {
+  font-size: clamp(2.75rem, 1.4rem + 6vw, 5.5rem);
+  font-weight: 600; letter-spacing: -0.035em; line-height: 1.04; text-wrap: balance;
+}
+.hero__texto {
+  max-width: 36rem; margin: 1.25rem auto 0;
+  font-size: clamp(1.1875rem, 1rem + 0.8vw, 1.5rem); line-height: 1.33;
+  color: #D2D2D7; text-wrap: balance;
+}
+.hero__acciones {
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 0.875rem; margin-top: 2rem;
+}
+
+/* La placa: lo único "ilustrado" de la página. Es decorativa (aria-hidden). */
+.placa-grande {
+  position: relative; display: grid; place-items: center;
+  width: min(86vw, 40rem); aspect-ratio: 2 / 1; margin: clamp(3rem, 7vw, 5rem) auto 0;
+  border-radius: clamp(0.9rem, 3vw, 1.75rem);
+  background: var(--placa); color: var(--placa-tinta);
+  box-shadow:
+    inset 0 0 0 clamp(3px, 0.9vw, 7px) var(--placa-tinta),
+    0 2.5rem 6rem rgb(252 209 22 / 0.16);
+}
+.placa-grande::before, .placa-grande::after {   /* tornillos */
+  content: ""; position: absolute; top: 11%;
+  width: clamp(0.5rem, 1.6vw, 0.9rem); aspect-ratio: 1; border-radius: 50%;
+  background: var(--placa-tinta); opacity: 0.85;
+}
+.placa-grande::before { left: 7%; }
+.placa-grande::after { right: 7%; }
+.placa-grande__codigo {
+  font-size: clamp(2.6rem, 11.5vw, 7.75rem); font-weight: 800; line-height: 1;
+  letter-spacing: 0.04em; font-variant-numeric: tabular-nums; transform: translateY(-4%);
+}
+.placa-grande__pais {
+  position: absolute; bottom: 9%; left: 0; right: 0;
+  font-size: clamp(0.6rem, 2.1vw, 1.25rem); font-weight: 700; letter-spacing: 0.4em; text-indent: 0.4em;
+}
+
+/* ---------- Secciones ---------- */
+.seccion { padding-block: clamp(4rem, 10vw, 8rem); text-align: center; }
+.seccion--suave { background: var(--suave); }
+
+.seccion__titulo {
+  font-size: clamp(2rem, 1.1rem + 3.6vw, 3.5rem);
+  font-weight: 600; letter-spacing: -0.03em; line-height: 1.08; text-wrap: balance;
+}
+.seccion__texto {
+  max-width: 40rem; margin: 1.25rem auto 0;
+  font-size: clamp(1.0625rem, 0.95rem + 0.6vw, 1.375rem); line-height: 1.4;
+  color: var(--tinta-2); text-wrap: balance;
+}
+
+/* Filtro por marca */
+.filtros { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem; margin-top: 2rem; }
+.filtro {
+  min-height: 2.25rem; padding: 0.375rem 1rem; border: 0; border-radius: 62rem;
+  background: var(--filtro); color: var(--filtro-texto);
+  font: inherit; font-size: 0.9375rem; cursor: pointer;
+}
+@media (pointer: coarse) { .filtro { min-height: 2.75rem; } }
+.filtro[aria-pressed="true"] { background: var(--filtro-activo); color: var(--filtro-activo-texto); font-weight: 600; }
+
+/* ---------- Tarjetas de vehículo ---------- */
+.tarjetas {
+  display: grid; gap: 0.75rem; margin-top: 2.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 22rem), 1fr));
+}
+.tarjeta {
+  display: flex; flex-direction: column; align-items: center;
+  min-height: 21rem; padding: 2.5rem 1.5rem 2rem;
+  background: var(--suave); border-radius: var(--radio-tarjeta);
+}
+.tarjeta__nombre {
+  font-size: clamp(1.75rem, 1.4rem + 1vw, 2.25rem);
+  font-weight: 600; letter-spacing: -0.02em; line-height: 1.1; overflow-wrap: anywhere;
+}
+.tarjeta__marca {
+  display: block; margin-bottom: 0.25rem;
+  font-size: 1.0625rem; font-weight: 400; letter-spacing: 0; color: var(--tinta-2);
+}
+.tarjeta__anio { margin-top: 0.5rem; color: var(--tinta-2); }
+.tarjeta__precio {
+  margin-top: auto; padding-top: 1.75rem;
+  font-size: 1.5rem; font-weight: 600; letter-spacing: -0.01em; font-variant-numeric: tabular-nums;
+}
+.tarjeta__usd { font-size: 0.9375rem; color: var(--tinta-2); font-variant-numeric: tabular-nums; }
+.tarjeta__descuento { margin-top: 0.5rem; font-size: 0.9375rem; font-weight: 500; font-variant-numeric: tabular-nums; }
+
+.placa-mini {
+  display: inline-block; margin-top: 1.25rem; padding: 0.125rem 0.625rem;
+  border-radius: 0.375rem; background: var(--placa); color: var(--placa-tinta);
+  box-shadow: inset 0 0 0 2px var(--placa-tinta);
+  font-size: 0.8125rem; font-weight: 700; letter-spacing: 0.12em; font-variant-numeric: tabular-nums;
+}
+
+/* Carga: la misma forma que la tarjeta, sin texto */
+.tarjeta--esqueleto .esq {
+  display: block; border-radius: 0.5rem; background: rgb(128 128 128 / 0.2);
+  animation: pulso 1.4s ease-in-out infinite;
+}
+.esq--nombre { width: 55%; height: 2rem; margin-top: 0.5rem; }
+.esq--dato { width: 30%; height: 1rem; margin-top: 0.75rem; }
+.esq--precio { width: 45%; height: 1.5rem; margin-top: auto; }
+@keyframes pulso { 50% { opacity: 0.5; } }
+@media (prefers-reduced-motion: reduce) { .tarjeta--esqueleto .esq { animation: none; } }
+
+/* Vacío y error ocupan toda la fila */
+.mensaje {
+  grid-column: 1 / -1; padding: 4rem 1.5rem; border-radius: var(--radio-tarjeta);
+  background: var(--suave); text-align: center;
+}
+.mensaje__titulo { font-size: 1.5rem; font-weight: 600; letter-spacing: -0.01em; }
+.mensaje p { max-width: 32rem; margin: 0.5rem auto 0; color: var(--tinta-2); }
+.mensaje .boton { margin-top: 1.5rem; }
+
+.tarjetas-pie { margin-top: 2.5rem; }
+
+/* ---------- Condiciones (descuento) ---------- */
+.ejemplo { width: min(100%, 26rem); margin: 2.5rem auto 0; text-align: left; }
+.ejemplo div { display: flex; justify-content: space-between; gap: 1rem; padding: 0.75rem 0; border-bottom: 1px solid var(--linea); }
+.ejemplo dt { color: var(--tinta-2); }
+.ejemplo dd { font-variant-numeric: tabular-nums; }
+.ejemplo .ejemplo__total { border-bottom: 0; font-size: 1.25rem; font-weight: 600; }
+.ejemplo .ejemplo__total dt { color: var(--tinta); }
+
+/* ---------- Pie ---------- */
+.pie {
+  padding-block: 1.75rem 2.5rem; border-top: 1px solid var(--linea);
+  background: var(--suave); color: var(--tinta-2); font-size: 0.75rem; line-height: 1.33;
+}
+.pie p + p { margin-top: 0.5rem; }
