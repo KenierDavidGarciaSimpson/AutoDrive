@@ -26,7 +26,7 @@ const SECCIONES = [
     titulo: 'Panel principal',
     descripcion: 'Resumen del inventario, tasa de cambio y últimas ventas.',
     icono: 'panel',
-    lista: false,
+    lista: true,
     cargar: () => import('./pantallas/panel.js'),
   },
   {
@@ -53,7 +53,7 @@ const SECCIONES = [
     titulo: 'Ventas',
     descripcion: 'Registro de ventas y su historial.',
     icono: 'ventas',
-    lista: false,
+    lista: true,
     cargar: () => import('./pantallas/ventas.js'),
   },
   {
@@ -86,7 +86,7 @@ function dibujarMenu() {
           'a',
           { class: 'navegacion__enlace', href: `#/${s.id}`, dataset: { seccion: s.id } },
           h('span', { class: 'navegacion__icono' }, icono(s.icono)),
-          h('span', {}, s.etiqueta),
+          h('span', { class: 'navegacion__texto' }, s.etiqueta),
         ),
       ),
     ),
