@@ -114,28 +114,78 @@ h1:focus {
   top: var(--e-3);
 }
 
+/* ==========================================================================
+   Estructura del panel
+   Móvil: barra superior + pestañas abajo.
+   Escritorio: carril de iconos a la izquierda + barra superior + contenido.
+   ========================================================================== */
 .app {
   min-height: 100dvh;
 }
 
-.lateral {
+/* El contenedor del menú: en móvil solo aloja la navegación fija de abajo */
+.lateral { padding: 0; }
+
+/* La ficha de marca del carril (solo escritorio): placa amarilla sobre fondo oscuro */
+.marca {
+  display: none;
+  place-items: center;
+  width: var(--objetivo);
+  height: var(--objetivo);
+  border-radius: var(--r-control);
+  background: var(--c-tinta);
+  color: var(--c-placa-fondo);
+  text-decoration: none;
+}
+.marca svg { width: 1.5rem; height: 1.5rem; }
+
+.principal { min-width: 0; display: flex; flex-direction: column; }
+
+/* ---------- Barra superior ---------- */
+.barra {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--e-4);
   padding: calc(var(--e-3) + env(safe-area-inset-top, 0px)) var(--e-4) var(--e-1);
 }
-
-.marca {
+.barra__marca {
   display: inline-flex;
   align-items: center;
-  gap: var(--e-1);
-  color: var(--c-tinta);
-  text-decoration: none;
+  gap: var(--e-2);
   font-size: var(--fs-titulo-3);
   line-height: var(--lh-ui);
   letter-spacing: -0.01em;
-  min-height: var(--objetivo);
+  min-width: 0;
 }
-.marca__nombre { font-weight: var(--peso-negrita); }
-.marca__apellido { font-weight: var(--peso-normal); color: var(--c-tinta-2); }
+.barra__marca svg { width: 1.5rem; height: 1.5rem; flex: none; color: var(--c-acento); }
+.barra__nombre { font-weight: var(--peso-negrita); }
+.barra__apellido { font-weight: var(--peso-normal); color: var(--c-tinta-2); }
 
+.usuario {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--e-3);
+  min-width: 0;
+}
+.usuario__avatar {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  background: var(--c-acento-suave);
+  color: var(--c-acento);
+  font-size: var(--fs-nota);
+  font-weight: var(--peso-negrita);
+  letter-spacing: 0.02em;
+}
+.usuario__datos { display: none; line-height: var(--lh-ui); }
+.usuario__nombre { display: block; font-size: var(--fs-llamada); font-weight: var(--peso-fuerte); }
+.usuario__rol { display: block; font-size: var(--fs-nota); color: var(--c-tinta-2); }
+
+/* ---------- Navegación (móvil: pestañas abajo) ---------- */
 .navegacion {
   position: fixed;
   inset: auto 0 0 0;
@@ -158,6 +208,7 @@ h1:focus {
 .navegacion__lista > li { flex: 1; min-width: 0; }
 
 .navegacion__enlace {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -167,13 +218,12 @@ h1:focus {
   padding: var(--e-2) var(--e-1);
   color: var(--c-tinta-2);
   text-decoration: none;
-  font-size: var(--fs-pie);   
+  font-size: var(--fs-pie);
   line-height: var(--lh-ui);
   font-weight: var(--peso-medio);
   border-radius: 0;
 }
 .navegacion__enlace svg { width: 1.5rem; height: 1.5rem; }
-
 
 .navegacion__enlace[aria-current="page"] {
   color: var(--c-acento);
@@ -199,27 +249,29 @@ h1:focus {
   min-width: 0;
 }
 
-
+/* ---------- Escritorio: carril de iconos ---------- */
 @media (min-width: 56.25rem) {
   .app {
     display: grid;
-    grid-template-columns: 15rem minmax(0, 1fr);
+    grid-template-columns: 4.75rem minmax(0, 1fr);
   }
 
   .lateral {
     position: sticky;
     top: 0;
+    z-index: 20;
     height: 100dvh;
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: var(--e-6);
-    padding: var(--e-6) var(--e-3);
+    padding: var(--e-4) var(--e-2);
     background: var(--c-superficie);
     border-right: 1px solid var(--c-linea);
-    overflow-y: auto;
   }
 
-  .marca { padding: 0 var(--e-3); }
+  .marca { display: grid; }
+  .marca:focus-visible { outline-offset: 3px; }
 
   .navegacion {
     position: static;
@@ -231,23 +283,26 @@ h1:focus {
   .navegacion__lista {
     display: flex;
     flex-direction: column;
-    gap: var(--e-1);
+    align-items: center;
+    gap: var(--e-2);
   }
+  .navegacion__lista > li { flex: none; }
 
   .navegacion__enlace {
-    flex-direction: row;
-    justify-content: flex-start;
-    gap: var(--e-3);
-    min-height: var(--objetivo);
-    padding: var(--e-2) var(--e-3);
-    font-size: var(--fs-llamada);
+    width: var(--objetivo);
+    height: var(--objetivo);
+    min-height: 0;
+    padding: 0;
     border-radius: var(--r-control);
   }
   .navegacion__enlace svg { width: 1.25rem; height: 1.25rem; }
-  .navegacion__enlace:hover { background: var(--c-fondo); }
+  .navegacion__enlace:hover { background: var(--c-fondo); color: var(--c-tinta); }
+
+  /* Sección actual: ficha rellena con el color de acento (el icono + aria-current la señalan) */
   .navegacion__enlace[aria-current="page"],
   .navegacion__enlace[aria-current="page"]:hover {
-    background: var(--c-acento-suave);
+    background: var(--c-acento);
+    color: var(--c-sobre-acento);
   }
   .navegacion__icono,
   .navegacion__enlace[aria-current="page"] .navegacion__icono {
@@ -257,11 +312,36 @@ h1:focus {
   }
   .navegacion__enlace:focus-visible { outline-offset: 2px; }
 
+  /* El nombre de la sección sigue en el HTML para lectores de pantalla y aparece
+     como etiqueta flotante al pasar el cursor o enfocar con el teclado. */
+  .navegacion__texto {
+    position: absolute;
+    left: calc(100% + var(--e-2));
+    top: 50%;
+    transform: translateY(-50%);
+    padding: var(--e-1) var(--e-3);
+    border-radius: var(--r-control);
+    background: var(--c-tinta);
+    color: var(--c-superficie);
+    font-size: var(--fs-nota);
+    font-weight: var(--peso-fuerte);
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--t-rapido);
+  }
+  .navegacion__enlace:hover .navegacion__texto,
+  .navegacion__enlace:focus-visible .navegacion__texto { opacity: 1; }
+
+  .barra { padding: var(--e-6) var(--e-10) 0; }
+  .barra__marca svg { display: none; }
+  .usuario__datos { display: block; }
+
   .contenido {
     width: 100%;
-    max-width: 76rem;
+    max-width: 80rem;
     margin-inline: auto;
-    padding: var(--e-8) var(--e-10);
+    padding: var(--e-6) var(--e-10) var(--e-8);
   }
 }
 

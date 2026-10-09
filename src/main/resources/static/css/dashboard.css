@@ -1,0 +1,262 @@
+/* ==========================================================================
+   AutoDrive Motors - panel principal (dashboard)
+   Ruta: src/main/resources/static/css/dashboard.css
+
+   Tarjetas de indicadores, gráfico de líneas, dona y últimas ventas.
+   Todos los colores salen de tokens.css; no hay colores nuevos aquí.
+   ========================================================================== */
+
+/* La barra superior se alinea con el contenido en pantallas muy anchas */
+@media (min-width: 56.25rem) {
+  .barra { width: 100%; max-width: 80rem; margin-inline: auto; }
+}
+
+.tablero { display: grid; gap: var(--e-4); }
+
+/* ---------- Indicadores (KPI) ---------- */
+.indicadores {
+  display: grid;
+  gap: var(--e-4);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 13.5rem), 1fr));
+}
+
+.indicador {
+  container-type: inline-size;
+  position: relative;
+  display: grid;
+  gap: var(--e-1);
+  align-content: start;
+  padding: var(--e-5);
+  background: var(--c-superficie);
+  border: 1px solid var(--c-linea);
+  border-radius: var(--r-contenedor);
+  min-width: 0;
+}
+.indicador__cabecera {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--e-3);
+}
+.indicador__etiqueta {
+  font-size: var(--fs-subtitulo);
+  font-weight: var(--peso-fuerte);
+  color: var(--c-tinta-2);
+  line-height: var(--lh-ui);
+}
+.indicador__icono {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  background: var(--c-acento-suave);
+  color: var(--c-acento);
+}
+.indicador__icono svg { width: 1.125rem; height: 1.125rem; }
+.indicador__valor {
+  margin-top: var(--e-3);
+  font-size: clamp(1.25rem, 9.5cqi, 1.875rem);
+  font-weight: var(--peso-negrita);
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+.indicador__nota {
+  display: flex;
+  align-items: center;
+  gap: var(--e-1);
+  font-size: var(--fs-nota);
+  color: var(--c-tinta-2);
+  line-height: var(--lh-ui);
+}
+.indicador__nota svg { width: 0.875rem; height: 0.875rem; flex: none; }
+/* Tendencia: siempre flecha + texto; el color solo refuerza */
+.indicador__nota--sube { color: var(--c-exito); font-weight: var(--peso-fuerte); }
+.indicador__nota--baja { color: var(--c-peligro); font-weight: var(--peso-fuerte); }
+
+/* La primera tarjeta va rellena con el acento, como la tarjeta oscura del modelo */
+.indicador--principal {
+  background: var(--c-acento);
+  border-color: var(--c-acento);
+  color: var(--c-sobre-acento);
+}
+.indicador--principal .indicador__etiqueta,
+.indicador--principal .indicador__nota { color: color-mix(in srgb, var(--c-sobre-acento) 82%, transparent); }
+.indicador--principal .indicador__icono {
+  background: color-mix(in srgb, var(--c-sobre-acento) 18%, transparent);
+  color: var(--c-sobre-acento);
+}
+.indicador--principal .indicador__nota--sube,
+.indicador--principal .indicador__nota--baja { color: var(--c-sobre-acento); }
+
+/* ---------- Tarjetas de gráfico ---------- */
+.graficos {
+  display: grid;
+  gap: var(--e-4);
+  grid-template-columns: minmax(0, 1fr);
+}
+@media (min-width: 72rem) {
+  .graficos { grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); }
+}
+
+.tarjeta {
+  display: grid;
+  gap: var(--e-4);
+  align-content: start;
+  padding: var(--e-5);
+  background: var(--c-superficie);
+  border: 1px solid var(--c-linea);
+  border-radius: var(--r-contenedor);
+  min-width: 0;
+}
+.tarjeta__cabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--e-3);
+}
+.tarjeta__titulo { font-size: var(--fs-titulo-3); }
+.tarjeta__enlace {
+  display: grid;
+  place-items: center;
+  width: var(--objetivo);
+  height: var(--objetivo);
+  margin: calc(var(--e-2) * -1);
+  border-radius: 50%;
+  color: var(--c-tinta-2);
+  text-decoration: none;
+}
+.tarjeta__enlace:hover { background: var(--c-fondo); color: var(--c-tinta); }
+.tarjeta__enlace svg { width: 1.25rem; height: 1.25rem; }
+.tarjeta__nota { font-size: var(--fs-nota); color: var(--c-tinta-2); }
+
+/* ---------- Leyenda ---------- */
+.leyenda {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--e-2) var(--e-5);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--fs-nota);
+  color: var(--c-tinta-2);
+}
+.leyenda li { display: inline-flex; align-items: center; gap: var(--e-2); }
+.leyenda__trazo {
+  width: 1.25rem;
+  height: 0;
+  border-top: 2px solid var(--serie, var(--g-1));
+}
+.leyenda__trazo--punteado { border-top-style: dashed; }
+
+/* ---------- Gráfico de líneas ---------- */
+.lineas { position: relative; min-height: 15rem; }
+.lineas svg { width: 100%; height: auto; overflow: visible; touch-action: pan-y; }
+.lineas__rejilla { stroke: var(--c-linea); stroke-width: 1; }
+.lineas__eje {
+  fill: var(--c-tinta-2);
+  font-size: 11px;
+  font-family: var(--fuente);
+  font-variant-numeric: tabular-nums;
+}
+.lineas__serie {
+  fill: none;
+  stroke: var(--serie);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.lineas__serie--punteada { stroke-dasharray: 6 4; }
+.lineas__punto { fill: var(--serie); stroke: var(--c-superficie); stroke-width: 2; }
+.lineas__guia { stroke: var(--c-borde-control); stroke-width: 1; stroke-dasharray: 3 3; }
+.lineas__zona { fill: transparent; cursor: crosshair; }
+.lineas__zona:focus-visible { outline: 3px solid var(--c-acento); outline-offset: -3px; }
+
+.globo {
+  position: absolute;
+  z-index: 2;
+  min-width: 10rem;
+  max-width: 16rem;
+  padding: var(--e-2) var(--e-3);
+  background: var(--c-superficie-elevada);
+  border: 1px solid var(--c-linea);
+  border-radius: var(--r-control);
+  box-shadow: 0 0.5rem 1.5rem rgb(0 0 0 / 0.15);
+  font-size: var(--fs-nota);
+  line-height: var(--lh-ui);
+  pointer-events: none;
+}
+.globo__titulo { color: var(--c-tinta-2); margin-bottom: var(--e-1); }
+.globo__titulo::first-letter, .primera-mayuscula::first-letter { text-transform: uppercase; }
+.globo__fila { display: flex; align-items: center; gap: var(--e-2); padding: 0.125rem 0; }
+.globo__fila .leyenda__trazo { width: 0.875rem; flex: none; }
+.globo__valor { margin-left: auto; padding-left: var(--e-3); font-weight: var(--peso-negrita); font-variant-numeric: tabular-nums; }
+.globo__nombre { color: var(--c-tinta-2); }
+
+/* ---------- Dona ---------- */
+.dona {
+  display: grid;
+  gap: var(--e-5);
+  justify-items: center;
+}
+.dona__figura { position: relative; width: min(100%, 11.5rem); aspect-ratio: 1; }
+.dona__figura svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+.dona__pista { fill: none; stroke: var(--c-linea); }
+.dona__tramo { fill: none; transition: opacity var(--t-rapido); }
+.dona__tramo:hover { opacity: 0.8; }
+.dona__centro {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  text-align: center;
+  line-height: var(--lh-ui);
+}
+.dona__total { font-size: var(--fs-titulo-1); font-weight: var(--peso-negrita); font-variant-numeric: tabular-nums; }
+.dona__rotulo { font-size: var(--fs-nota); color: var(--c-tinta-2); }
+
+.dona__lista {
+  display: grid;
+  gap: var(--e-2);
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.dona__item {
+  display: flex;
+  align-items: center;
+  gap: var(--e-2);
+  font-size: var(--fs-llamada);
+}
+.dona__color { width: 0.75rem; height: 0.75rem; border-radius: 0.1875rem; background: var(--serie); flex: none; }
+.dona__cifra { margin-left: auto; font-weight: var(--peso-fuerte); font-variant-numeric: tabular-nums; }
+.dona__pct { min-width: 3rem; text-align: right; color: var(--c-tinta-2); font-size: var(--fs-nota); font-variant-numeric: tabular-nums; }
+
+/* ---------- Últimas ventas ---------- */
+.tarjeta--tabla { padding: 0; gap: 0; overflow: hidden; }
+.tarjeta--tabla .tarjeta__cabecera { padding: var(--e-5) var(--e-5) var(--e-3); }
+.tarjeta--tabla .tabla-envoltura { border: 0; border-radius: 0; }
+.tarjeta--tabla .tabla tbody tr:last-child td { border-bottom: 0; }
+.tarjeta__vacio { padding: var(--e-4) var(--e-5) var(--e-8); color: var(--c-tinta-2); }
+
+/* ---------- Carga ---------- */
+.tablero--carga .indicador,
+.tablero--carga .tarjeta { min-height: 7rem; }
+.tablero--carga .tarjeta { min-height: 16rem; }
+
+/* ---------- Datos del gráfico en tabla (desplegable) ---------- */
+.tarjeta__datos summary {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--objetivo);
+  color: var(--c-acento);
+  font-size: var(--fs-subtitulo);
+  font-weight: var(--peso-fuerte);
+  cursor: pointer;
+}
+.tarjeta__datos[open] summary { margin-bottom: var(--e-2); }
+.primera-mayuscula { display: inline-block; }

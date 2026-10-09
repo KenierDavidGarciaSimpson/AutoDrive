@@ -75,6 +75,13 @@ const ICONOS = {
     '<path d="M3 13l2.5-8a1.5 1.5 0 0 1 1.4-1h10.2a1.5 1.5 0 0 1 1.4 1l2.5 8"/>' +
     '<path d="M3 13v5a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-5h-5.5a2 2 0 0 1-2 2h-3a2 2 0 0 1-2-2z"/>',
   reintentar: '<path d="M20 12a8 8 0 1 1-2.6-5.9"/><path d="M20 4v4.5h-4.5"/>',
+  dinero:
+    '<circle cx="12" cy="12" r="9"/><path d="M14.6 9.3c-.5-.8-1.4-1.3-2.6-1.3-1.5 0-2.5.8-2.5 1.9 0 2.6 5 1.4 5 4.1 0 1.1-1.1 2-2.6 2-1.2 0-2.2-.5-2.7-1.4"/>' +
+    '<path d="M12 6.5V8M12 16v1.5"/>',
+  cambio: '<path d="M4 8h15l-3.5-3.5M20 16H5l3.5 3.5"/>',
+  sube: '<path d="M7 17 17 7M9 7h8v8"/>',
+  baja: '<path d="M7 7l10 10M17 9v8H9"/>',
+  siguiente: '<path d="M9 6l6 6-6 6"/>',
 };
 
 const ESPACIO_SVG = 'http://www.w3.org/2000/svg';

@@ -5,7 +5,8 @@
 
   Spring Boot la entrega en http://localhost:8080/ . El panel de gestión
   (clientes, ventas, mantenimientos) vive en panel.html.
-  Los vehículos y la tasa de cambio los pinta js/vitrina.js desde la API.
+  Los vehículos y la tasa de cambio los pinta js/vitrina.js desde la API;
+  el auto 3D de la portada, js/auto3d.js.
 -->
 <html lang="es">
 <head>
@@ -20,6 +21,13 @@
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='2' y='8' width='28' height='16' rx='3' fill='%23FCD116' stroke='%231D1D1F' stroke-width='2'/%3E%3Cpath d='M8 16h16' stroke='%231D1D1F' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
 
   <link rel="stylesheet" href="css/vitrina.css">
+
+  <!-- three.js y GSAP van dentro del proyecto (js/lib/): la vitrina funciona sin internet -->
+  <script type="importmap">
+    { "imports": { "three": "./js/lib/three/three.module.js", "three/addons/": "./js/lib/three/addons/" } }
+  </script>
+  <script defer src="js/lib/gsap.min.js"></script>
+  <script defer src="js/lib/ScrollTrigger.min.js"></script>
 </head>
 <body>
   <a class="saltar" href="#vehiculos">Saltar a los vehículos</a>
@@ -36,18 +44,43 @@
   </header>
 
   <main>
-    <section class="hero" aria-labelledby="titulo-hero">
-      <div class="contenedor">
-        <h1 class="hero__titulo" id="titulo-hero">Encuentra tu próximo vehículo.</h1>
-        <p class="hero__texto">Inventario al día, con precios en pesos y en dólares, y 5&nbsp;% menos en los de más de $100.000.000.</p>
-        <div class="hero__acciones">
-          <a class="boton boton--primario" href="#vehiculos">Ver vehículos</a>
-          <a class="boton boton--contorno" href="#descuento">Cómo funciona el descuento</a>
+    <section class="historia" aria-labelledby="titulo-hero">
+      <div class="historia__escenario">
+        <!-- El auto 3D lo dibuja js/auto3d.js; sin WebGL este canvas no se muestra -->
+        <canvas class="historia__lienzo" id="auto3d" role="img" aria-label="Deportivo azul visto desde distintos ángulos"></canvas>
+
+        <div class="paso paso--1">
+          <div class="contenedor">
+            <h1 class="paso__titulo" id="titulo-hero">Encuentra tu próximo vehículo.</h1>
+            <p class="paso__texto">Inventario al día, con precios en pesos y en dólares.</p>
+            <div class="paso__acciones">
+              <a class="boton boton--primario" href="#vehiculos">Ver vehículos</a>
+              <a class="boton boton--contorno" href="#descuento">Cómo funciona el descuento</a>
+            </div>
+
+            <!-- Alternativa decorativa mientras no hay auto 3D -->
+            <div class="placa-grande" aria-hidden="true">
+              <span class="placa-grande__codigo">ADM 123</span>
+              <span class="placa-grande__pais">COLOMBIA</span>
+            </div>
+          </div>
         </div>
 
-        <div class="placa-grande" aria-hidden="true">
-          <span class="placa-grande__codigo">ADM 123</span>
-          <span class="placa-grande__pais">COLOMBIA</span>
+        <div class="paso paso--2">
+          <div class="contenedor">
+            <h2 class="paso__titulo">Precio claro, en dos monedas.</h2>
+            <p class="paso__texto">El valor en dólares se calcula con la tasa de cambio vigente.</p>
+          </div>
+        </div>
+
+        <div class="paso paso--3">
+          <div class="contenedor">
+            <h2 class="paso__titulo">5&nbsp;% menos en los de más de $100.000.000.</h2>
+            <p class="paso__texto">El descuento se aplica solo, antes de confirmar la venta.</p>
+            <div class="paso__acciones">
+              <a class="boton boton--primario" href="#vehiculos">Ver vehículos</a>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -90,5 +123,6 @@
   </footer>
 
   <script type="module" src="js/vitrina.js"></script>
+  <script type="module" src="js/auto3d.js"></script>
 </body>
 </html>

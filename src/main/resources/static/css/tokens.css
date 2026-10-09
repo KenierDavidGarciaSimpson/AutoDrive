@@ -35,7 +35,7 @@
 
 
   --r-control: 0.5rem;      
-  --r-contenedor: 0.75rem;  
+  --r-contenedor: 1rem;  
   --r-dialogo: 1.25rem;     
   --r-placa: 0.375rem;      
 
@@ -79,6 +79,12 @@
   --c-placa-tinta: #1C2430;
 
   --c-velo: rgb(15 19 26 / 0.45); 
+
+  /* Colores de los gráficos del panel (validados con contraste y daltonismo).
+     Salen de la misma paleta: azul de acento, verde y naranja de los estados. */
+  --g-1: #1D5FBF;   /* ventas / vendido */
+  --g-2: #8F4200;   /* taller / en mantenimiento */
+  --g-3: #14663A;   /* disponible */
 }
 
 
@@ -111,6 +117,10 @@
     --c-mantenimiento-fondo: #3A2412;
 
     --c-velo: rgb(0 0 0 / 0.6);
+
+    --g-1: #4F86DB;
+    --g-2: #D2792A;
+    --g-3: #2FA06A;
   }
 }
 
